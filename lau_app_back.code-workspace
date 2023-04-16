@@ -1,0 +1,18 @@
+{
+	"folders": [
+		{
+			"path": "."
+		}
+	],
+	"settings": {
+		"workbench.colorCustomizations": {
+			"statusBar.background": "#70b8fd",
+			"statusBar.foreground": "#000",
+			"activityBar.background": "#70b8fd",
+			"activityBar.foreground": "#000"
+		},
+		"python.analysis.extraPaths": [
+		],
+		"python.envFile": "${workspaceFolder}/.env"
+	}
+}
