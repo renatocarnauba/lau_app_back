@@ -4,8 +4,7 @@ from jose import jwt
 from jose.exceptions import JWTError
 from pydantic import ValidationError
 
-from app.config.integration import crud, models
-from app.config.integration import schemas
+from app.config.integration import crud, models, schemas
 from app.config.settings import settings
 from app.modules.lau_commons.core import security
 from app.modules.lau_commons.core.exceptions import (

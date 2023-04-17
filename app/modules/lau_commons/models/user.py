@@ -24,12 +24,16 @@ class UserCreate(UserBase):
 class UserUpdate(UserBase):
     password: Optional[str] = None
 
+
 class UserView(ModelTemplate, UserBase):
     ...
 
+
 # Additional properties to return via API
+
+
 class User(ModelTemplate, UserBase):
     hashed_password: str
+
     class Config:
         orm_mode = True
-

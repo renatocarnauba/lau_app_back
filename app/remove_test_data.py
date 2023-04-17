@@ -12,7 +12,9 @@ def init() -> None:
 
 
 async def remove_test_data() -> None:
-    await crud.user.remove_test()
+    await crud.user.remove_by_dict({"is_test": True})
+    await crud.account.remove_by_dict({"is_test": True})
+    await crud.category.remove_by_dict({"is_test": True})
     return None
 
 

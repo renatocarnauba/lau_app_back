@@ -6,14 +6,17 @@ from httpx import AsyncClient
 from app.config.integration import crud
 from app.config.settings import settings
 from app.main import app
-from app.modules.lau_finance.models.category import CategoryCreate, Category
+from app.modules.lau_finance.models.category import Category, CategoryCreate
 from app.tests.utils.fakeUser import create_fake_user
 
 fake = Faker(["pt_BR"])
 
 
 def fake_category_data() -> dict[str, Any]:
-    data = {"name": fake.company()}
+    data = {
+        "name": fake.company(),
+        "is_test": True,
+    }
     return data
 
 

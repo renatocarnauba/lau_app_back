@@ -1,13 +1,12 @@
-from typing import ForwardRef, Optional
+from typing import Optional
 
 from pydantic import UUID4, BaseModel
 
-from app.modules.lau_commons.core.pydanticObjectId import PydanticObjectId
 from app.modules.lau_commons.models.baseModel import ModelTemplate
 
 
 class Category(ModelTemplate):
-    __tablename__ = 'fin_category'
+    __tablename__ = "fin_category"
     name: str
     owner_id: str
     parent_id: Optional[UUID4]
@@ -30,3 +29,4 @@ class CategoryUpdate(BaseModel):
 class CategoryCreate(BaseModel):
     name: str
     parent_id: Optional[UUID4] = None
+    is_test: bool = False

@@ -1,10 +1,10 @@
 from typing import Any, Generic, Optional, Sequence, Type, TypeVar
 from uuid import UUID
-from lau_utils.mongo import Mongo
-
-from pydantic import BaseModel
 
 from fastapi.encoders import jsonable_encoder
+from lau_utils.mongo import Mongo
+from pydantic import BaseModel
+
 Base = BaseModel
 Base = TypeVar("Base", bound=Base)
 CreateSchemaType = TypeVar("CreateSchemaType", bound=BaseModel)
@@ -39,11 +39,11 @@ class CRUDBaseAsync(Generic[Base, CreateSchemaType, UpdateSchemaType]):
             return None
 
     async def get_multi(self, *, skip: int = 0, limit: int = 100) -> Sequence[Base]:
-        mongo=Mongo(asyncConn=True)
+        mongo = Mongo(asyncConn=True)
         coll = await mongo.async_get_collection(self.model.__tablename__)
         cursor = coll.find({}, limit=limit, skip=skip)
         listData = await cursor.to_list(length=100)
-        tbObj=[self.model(**data)for data in listData]
+        tbObj = [self.model(**data) for data in listData]
         return tbObj
 
     async def create(self, *, obj_in: CreateSchemaType):
@@ -70,8 +70,8 @@ class CRUDBaseAsync(Generic[Base, CreateSchemaType, UpdateSchemaType]):
             update_data = obj_in.dict(exclude_unset=True)
 
         coll = await self.coll
-        update_data=jsonable_encoder(update_data)
-        
+        update_data = jsonable_encoder(update_data)
+
         await coll.update_one({"id": str(obj_data["id"])}, {"$set": update_data})
         return await self.get(obj_data["id"])
 
@@ -83,6 +83,11 @@ class CRUDBaseAsync(Generic[Base, CreateSchemaType, UpdateSchemaType]):
         filterDel = {"id": id}
         await coll.delete_one(filterDel)
         return objFind
+
+    async def remove_by_dict(self, dictFind) -> None:
+        coll = await self.coll
+        await coll.delete_many(dictFind)
+        return None
 
 
 class CRUDBaseMultiAsync(CRUDBaseAsync[Base, CreateSchemaType, UpdateSchemaType]):
@@ -119,12 +124,11 @@ class CRUDBaseMultiAsync(CRUDBaseAsync[Base, CreateSchemaType, UpdateSchemaType]
         else:
             return None
 
-
     async def get_multi_by_owner(self, *, owner_id: str, skip: int = 0, limit: int = 100):
         if isinstance(owner_id, UUID):
             owner_id = str(owner_id)
         coll = await self.coll
         cursor = coll.find({"owner_id": owner_id}, limit=limit, skip=skip)
         listData = await cursor.to_list(length=100)
-        tbObj=[self.model(**data)for data in listData]
+        tbObj = [self.model(**data) for data in listData]
         return tbObj

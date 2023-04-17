@@ -1,12 +1,15 @@
 from typing import Optional, TypeVar
 from uuid import UUID
+
+from pydantic import BaseModel
+
 from app.modules.lau_commons.crud.baseAsync import CRUDBaseMultiAsync
 from app.modules.lau_finance.models.category import (
-    CategoryCreate,
     Category,
+    CategoryCreate,
     CategoryUpdate,
 )
-from pydantic import BaseModel
+
 Base = BaseModel
 Base = TypeVar("Base", bound=Base)
 

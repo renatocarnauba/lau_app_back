@@ -9,8 +9,8 @@ from app.modules.lau_commons.core.exceptions import (
     UserWithoutPrivileges,
 )
 from app.modules.lau_finance.models.account import (
-    AccountCreate,
     Account,
+    AccountCreate,
     AccountUpdate,
     AccountView,
 )

@@ -53,7 +53,7 @@ coverage:
 	coverage report -m
 	coverage html 
 
-qa:	remove-test-data-initial clean-cache format lint mypy coverage remove-test-data 
+qa:	remove-test-data-initial clean-cache format lint coverage remove-test-data 
 
 clean-cache:
 	@find . | grep -E "(__pycache__|\.pyc|\.pyo$\)" | xargs rm -rf

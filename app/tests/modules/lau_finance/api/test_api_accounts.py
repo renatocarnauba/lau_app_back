@@ -1,11 +1,8 @@
-from pprint import pprint
 from typing import Any
 
 import pytest
-from httpx import AsyncClient
-from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy.ext.asyncio.session import async_sessionmaker
 from fastapi.encoders import jsonable_encoder
+from httpx import AsyncClient
 
 from app.config.integration import crud
 from app.config.settings import settings
@@ -34,12 +31,10 @@ class ValueStorage:
 
 
 @pytest.mark.anyio
-async def test_retrieve_account_mine(
-    normaluser_token_headers: dict[str, Any]
-) -> None:
+async def test_retrieve_account_mine(normaluser_token_headers: dict[str, Any]) -> None:
     tbAccounts = []
     for _ in range(5):
-        act = await create_fake_account_mine( normaluser_token_headers)
+        act = await create_fake_account_mine(normaluser_token_headers)
         acctDict = dict(act.__dict__)
         acctDict = jsonable_encoder(acctDict)
         tbAccounts.append(acctDict)
@@ -67,12 +62,10 @@ async def test_retrieve_account_normaluser(normaluser_token_headers: dict[str, A
 
 
 @pytest.mark.anyio
-async def test_retrieve_account_superuser(
-    superuser_token_headers: dict[str, Any]
-) -> None:
+async def test_retrieve_account_superuser(superuser_token_headers: dict[str, Any]) -> None:
     tbAccounts = []
     for _ in range(5):
-        act = await create_fake_account_mine( superuser_token_headers)
+        act = await create_fake_account_mine(superuser_token_headers)
         acctDict = dict(act.__dict__)
         acctDict = jsonable_encoder(acctDict)
         tbAccounts.append(acctDict)
@@ -99,11 +92,9 @@ async def test_create_account(normaluser_token_headers: dict[str, Any]) -> None:
 
 
 @pytest.mark.anyio
-async def test_update_account(
-    superuser_token_headers: dict[str, Any]
-) -> None:
+async def test_update_account(superuser_token_headers: dict[str, Any]) -> None:
     data = fake_account_data()
-    account = await create_fake_account( data=data)
+    account = await create_fake_account(data=data)
 
     name = fake_company()
     data["name"] = name
@@ -115,17 +106,15 @@ async def test_update_account(
             json=data,
         )
     assert 200 <= r.status_code < 300
-    stored_account = await crud.account.get( id=account.id)
+    stored_account = await crud.account.get(id=account.id)
     assert stored_account
     assert stored_account.name == name
 
 
 @pytest.mark.anyio
-async def test_update_account_user_without_privilegies(
-    normaluser_token_headers: dict[str, Any]
-) -> None:
+async def test_update_account_user_without_privilegies(normaluser_token_headers: dict[str, Any]) -> None:
     data = fake_account_data()
-    account = await create_fake_account( data=data)
+    account = await create_fake_account(data=data)
     name = fake_company()
     data["name"] = name
 
@@ -150,11 +139,9 @@ async def test_update_account_notFound(superuser_token_headers: dict[str, Any]) 
 
 
 @pytest.mark.anyio
-async def test_delete_account(
-    superuser_token_headers: dict[str, Any]
-) -> None:
+async def test_delete_account(superuser_token_headers: dict[str, Any]) -> None:
     data = fake_account_data()
-    account = await create_fake_account( data=data)
+    account = await create_fake_account(data=data)
 
     name = fake_company()
     data["name"] = name
@@ -165,16 +152,14 @@ async def test_delete_account(
             headers=superuser_token_headers,
         )
     assert 200 <= r.status_code < 300
-    stored_account = await crud.account.get( id=account.id)
+    stored_account = await crud.account.get(id=account.id)
     assert not stored_account
 
 
 @pytest.mark.anyio
-async def test_delete_account_user_without_privilegies(
-    normaluser_token_headers: dict[str, Any]
-) -> None:
+async def test_delete_account_user_without_privilegies(normaluser_token_headers: dict[str, Any]) -> None:
     data = fake_account_data()
-    account = await create_fake_account( data=data)
+    account = await create_fake_account(data=data)
     name = fake_company()
     data["name"] = name
 
@@ -197,11 +182,9 @@ async def test_delete_account_notFound(superuser_token_headers: dict[str, Any]) 
 
 
 @pytest.mark.anyio
-async def test_get_account(
-    superuser_token_headers: dict[str, Any]
-) -> None:
+async def test_get_account(superuser_token_headers: dict[str, Any]) -> None:
     data = fake_account_data()
-    account = await create_fake_account( data=data)
+    account = await create_fake_account(data=data)
 
     async with AsyncClient(app=app, base_url=f"{settings.SERVER_HOST}:{settings.SERVER_PORT}/") as ac:
         r = await ac.get(
@@ -209,18 +192,16 @@ async def test_get_account(
             headers=superuser_token_headers,
         )
     assert 200 <= r.status_code < 300
-    stored_account = await crud.account.get( id=account.id)
+    stored_account = await crud.account.get(id=account.id)
     assert stored_account
     assert stored_account.name == data["name"]
     assert stored_account.id == account.id
 
 
 @pytest.mark.anyio
-async def test_get_account_user_without_privilegies(
-    normaluser_token_headers: dict[str, Any]
-) -> None:
+async def test_get_account_user_without_privilegies(normaluser_token_headers: dict[str, Any]) -> None:
     data = fake_account_data()
-    account = await create_fake_account( data=data)
+    account = await create_fake_account(data=data)
     name = fake_company()
     data["name"] = name
 

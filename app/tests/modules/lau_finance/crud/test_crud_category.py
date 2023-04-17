@@ -2,8 +2,8 @@ import pytest
 
 from app.config.integration import crud
 from app.modules.lau_finance.models.category import (
-    CategoryCreate,
     Category,
+    CategoryCreate,
     CategoryUpdate,
 )
 from app.tests.modules.lau_finance.faker.fakeCategory import (
