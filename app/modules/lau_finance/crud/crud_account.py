@@ -1,13 +1,13 @@
 from app.modules.lau_commons.crud.baseAsync import CRUDBaseMultiAsync
 from app.modules.lau_finance.models.account import (
     AccountCreate,
-    AccountOrm,
+    Account,
     AccountUpdate,
 )
 
 
-class CRUDAccount(CRUDBaseMultiAsync[AccountOrm, AccountCreate, AccountUpdate]):
+class CRUDAccount(CRUDBaseMultiAsync[Account, AccountCreate, AccountUpdate]):
     ...
 
 
-account = CRUDAccount(AccountOrm)
+account = CRUDAccount(Account)

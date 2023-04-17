@@ -4,12 +4,12 @@ from typing import Any, Optional, Type
 from lau_utils.mongo import Mongo
 
 from app.modules.lau_commons.core.security import get_password_hash, verify_password
-from app.modules.lau_commons.crud.baseAsync import CRUDBaseAsync, ModelMongoType
+from app.modules.lau_commons.crud.baseAsync import CRUDBaseAsync, Base
 from app.modules.lau_commons.models.user import User, UserCreate, UserUpdate
 from fastapi.encoders import jsonable_encoder
 
 class CRUDUser(CRUDBaseAsync[User, UserCreate, UserUpdate]):
-    def __init__(self, model: Type[ModelMongoType], *args, **kwargs):
+    def __init__(self, model: Type[Base], *args, **kwargs):
         self.mongo = Mongo(asyncConn=True)
         self.model = model
         super().__init__(model, *args, **kwargs)

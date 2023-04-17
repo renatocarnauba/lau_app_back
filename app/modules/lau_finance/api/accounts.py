@@ -10,7 +10,7 @@ from app.modules.lau_commons.core.exceptions import (
 )
 from app.modules.lau_finance.models.account import (
     AccountCreate,
-    AccountOrm,
+    Account,
     AccountUpdate,
     AccountView,
 )
@@ -27,7 +27,7 @@ async def read_accounts_mine(
     """
     Retrieve accounts Mine.
     """
-    accounts = await crud.account.get_multi_by_owner(owner_id=int(current_user.id), skip=skip, limit=limit)
+    accounts = await crud.account.get_multi_by_owner(owner_id=str(current_user.id), skip=skip, limit=limit)
     return accounts
 
 
@@ -43,7 +43,7 @@ async def read_accounts(
     if crud.user.is_superuser(current_user):
         accounts = await crud.account.get_multi(skip=skip, limit=limit)
     else:
-        accounts = await crud.account.get_multi_by_owner(owner_id=int(current_user.id), skip=skip, limit=limit)
+        accounts = await crud.account.get_multi_by_owner(owner_id=str(current_user.id), skip=skip, limit=limit)
     return accounts
 
 
@@ -56,14 +56,14 @@ async def create_account(
     """
     Create new account.
     """
-    account: AccountOrm = await crud.account.create_with_owner(obj_in=account_in, owner_id=int(current_user.id))
+    account: Account = await crud.account.create_with_owner(obj_in=account_in, owner_id=str(current_user.id))
     return account
 
 
 @router.put("/{id}", response_model=AccountView)
 async def update_account(
     *,
-    id: int,
+    id: str,
     account_in: AccountUpdate,
     current_user: models.User = Depends(depsAsync.get_current_active_user),
 ) -> Any:
@@ -83,7 +83,7 @@ async def update_account(
 @router.get("/{id}", response_model=AccountView)
 async def read_account(
     *,
-    id: int,
+    id: str,
     current_user: models.User = Depends(depsAsync.get_current_active_user),
 ) -> Any:
     """
@@ -100,7 +100,7 @@ async def read_account(
 @router.delete("/{id}", response_model=AccountView)
 async def delete_account(
     *,
-    id: int,
+    id: str,
     current_user: models.User = Depends(depsAsync.get_current_active_user),
 ) -> Any:
     """

@@ -10,8 +10,8 @@ CategoryOrm = ForwardRef("CategoryOrm")
 
 class CategoryOrm(ModelTemplate):
     name: str
-    owner_id: int
-    parent_id: Optional[int]
+    owner_id: str
+    parent_id: Optional[str]
 
 CategoryOrm.update_forward_refs()
 
@@ -22,8 +22,8 @@ CategoryOrm.update_forward_refs()
 class CategoryModel(BaseModel):
     id: PydanticObjectId()
     name: str
-    owner_id: int
-    parent_id: Optional[int]
+    owner_id: str
+    parent_id: Optional[str]
 
 
 # Properties to return to client
@@ -34,7 +34,7 @@ class CategoryView(CategoryModel):
 # Properties to receive on item update
 class CategoryUpdate(BaseModel):
     name: Optional[str] = None
-    parent_id: Optional[int]
+    parent_id: Optional[str]
 
 
 # Properties to receive on item creation
@@ -42,4 +42,4 @@ class CategoryUpdate(BaseModel):
 
 class CategoryCreate(BaseModel):
     name: str
-    parent_id: Optional[int] = None
+    parent_id: Optional[str] = None

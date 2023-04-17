@@ -17,7 +17,7 @@ from app.tests.utils.fakeUser import create_fake_user
 async def test_create_category() -> None:
     category_in = CategoryCreate(**fake_category_data())
     user = await create_fake_user()
-    category = await crud.category.create_with_owner(obj_in=category_in, owner_id=int(user.id))
+    category = await crud.category.create_with_owner(obj_in=category_in, owner_id=str(user.id))
     assert category.name == category_in.name
     assert category.owner_id == user.id
 
@@ -48,8 +48,8 @@ async def test_delete_category() -> None:
     category_in_manter = CategoryCreate(**fake_category_data())
     category_in_excluir = CategoryCreate(**fake_category_data())
     user = await create_fake_user()
-    categoryExcluir = await crud.category.create_with_owner(obj_in=category_in_excluir, owner_id=int(user.id))
-    categoryManter = await crud.category.create_with_owner(obj_in=category_in_manter, owner_id=int(user.id))
+    categoryExcluir = await crud.category.create_with_owner(obj_in=category_in_excluir, owner_id=str(user.id))
+    categoryManter = await crud.category.create_with_owner(obj_in=category_in_manter, owner_id=str(user.id))
     categoryExcluida = await crud.category.remove(id=categoryExcluir.id)
     categoryExcluidaAposConsulta = await crud.category.get(id=categoryExcluir.id)
     categoryMantidaAposConsulta = await crud.category.get(id=categoryManter.id)
@@ -71,11 +71,11 @@ async def test_create_category_parent() -> None:
     category_in_parent = CategoryCreate(**fake_category_data())
 
     user = await create_fake_user()
-    categoryParent = await crud.category.create_with_owner(obj_in=category_in_parent, owner_id=int(user.id))
+    categoryParent = await crud.category.create_with_owner(obj_in=category_in_parent, owner_id=str(user.id))
 
     category_in = CategoryCreate(**fake_category_data())
     category_in.parent_id = categoryParent.id
-    category = await crud.category.create_with_owner(obj_in=category_in, owner_id=int(user.id))
+    category = await crud.category.create_with_owner(obj_in=category_in, owner_id=str(user.id))
     assert category.name == category_in.name
     assert category.owner_id == user.id
     assert category.parent_id == categoryParent.id
@@ -91,7 +91,7 @@ async def test_update_category_parent() -> None:
 
     category_in = CategoryCreate(**fake_category_data())
     category_in.parent_id = categoryParentFrom.id
-    category = await crud.category.create_with_owner(obj_in=category_in, owner_id=int(categoryParentFrom.owner_id))
+    category = await crud.category.create_with_owner(obj_in=category_in, owner_id=str(categoryParentFrom.owner_id))
     assert category.name == category_in.name
     assert category.owner_id == categoryParentFrom.owner_id
     assert category.parent_id == categoryParentFrom.id
@@ -106,11 +106,11 @@ async def test_update_category_parent() -> None:
 async def test_delete_category_parent() -> None:
     category_in_parent = CategoryCreate(**fake_category_data())
     user = await create_fake_user()
-    categoryParent = await crud.category.create_with_owner(obj_in=category_in_parent, owner_id=int(user.id))
+    categoryParent = await crud.category.create_with_owner(obj_in=category_in_parent, owner_id=str(user.id))
 
     category_in = CategoryCreate(**fake_category_data())
     category_in.parent_id = categoryParent.id
-    categoryChild = await crud.category.create_with_owner(obj_in=category_in, owner_id=int(user.id))
+    categoryChild = await crud.category.create_with_owner(obj_in=category_in, owner_id=str(user.id))
     assert categoryChild.name == category_in.name
     assert categoryChild.owner_id == user.id
     assert categoryChild.parent_id == categoryParent.id

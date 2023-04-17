@@ -35,10 +35,10 @@ async def create_user(
     """
     Create new user.
     """
-    user = await crud.user.get_by_email( email=user_in.email)
+    user = await crud.user.get_by_email(email=user_in.email)
     if user:
         raise UserAlreadyExists()
-    user = await crud.user.create( obj_in=user_in)
+    user = await crud.user.create(obj_in=user_in)
     return user
 
 
@@ -54,7 +54,7 @@ async def read_user_me(
 
 @router.get("/{user_id}", response_model=models.User)
 async def read_user_by_id(
-    user_id: int,
+    user_id: str,
     current_user: models.User = Depends(depsAsync.get_current_active_user),
 ) -> Any:
     """
@@ -71,14 +71,13 @@ async def read_user_by_id(
 @router.put("/{user_id}", response_model=models.User)
 async def update_user(
     *,
-    user_id: int,
+    user_id: str,
     user_in: schemas.UserUpdate,
     _: models.User = Depends(depsAsync.get_current_active_superuser),
 ) -> Any:
     """
     Update a user.
     """
-    print('aqui')
     user = await crud.user.get(id=user_id)
     if not user:
         raise UserNotFound()

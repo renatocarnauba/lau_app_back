@@ -5,7 +5,7 @@ from sqlalchemy.ext.asyncio.session import async_sessionmaker
 from app.config.integration import crud
 from app.modules.lau_finance.models.account import (
     AccountCreate,
-    AccountOrm,
+    Account,
     AccountUpdate,
 )
 from app.tests.modules.lau_finance.faker.fakeAccount import (
@@ -19,9 +19,9 @@ from app.tests.utils.fakeUser import create_fake_user
 async def test_create_account() -> None:
     account_in = AccountCreate(**fake_account_data())
     user = await create_fake_user()
-    account = await crud.account.create_with_owner( obj_in=account_in, owner_id=int(user.id))
+    account = await crud.account.create_with_owner( obj_in=account_in, owner_id=str(user.id))
     assert account.name == account_in.name
-    assert account.owner_id == user.id
+    assert account.owner_id == str(user.id)
 
 
 @pytest.mark.asyncio
@@ -51,22 +51,22 @@ async def test_delete_account() -> None:
     account_in_excluir = AccountCreate(**fake_account_data())
     user = await create_fake_user()
     accountExcluir = await crud.account.create_with_owner(
-         obj_in=account_in_excluir, owner_id=int(user.id)
+         obj_in=account_in_excluir, owner_id=str(user.id)
     )
     accountManter = await crud.account.create_with_owner(
-         obj_in=account_in_manter, owner_id=int(user.id)
+         obj_in=account_in_manter, owner_id=str(user.id)
     )
-    accountExcluida = await crud.account.remove( id=int(accountExcluir.id))
+    accountExcluida = await crud.account.remove( id=str(accountExcluir.id))
     accountExcluidaAposConsulta = await crud.account.get( id=accountExcluir.id)
     accountMantidaAposConsulta = await crud.account.get( id=accountManter.id)
     assert accountExcluidaAposConsulta is None
     assert accountExcluida is not None
-    accountExcluidaX: AccountOrm = accountExcluida
+    accountExcluidaX: Account = accountExcluida
     assert accountExcluidaX.id == accountExcluir.id
     assert accountExcluidaX.name == account_in_excluir.name
     assert accountExcluidaX.owner_id == user.id
     assert accountMantidaAposConsulta is not None
-    accountMantidaAposConsultaX: AccountOrm = accountMantidaAposConsulta
+    accountMantidaAposConsultaX: Account = accountMantidaAposConsulta
     assert accountMantidaAposConsultaX.id == accountManter.id
     assert accountMantidaAposConsultaX.name == account_in_manter.name
     assert accountMantidaAposConsultaX.owner_id == user.id

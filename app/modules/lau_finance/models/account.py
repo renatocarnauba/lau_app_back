@@ -5,25 +5,15 @@ from pydantic import UUID4, BaseModel
 from app.modules.lau_commons.models.baseModel import ModelTemplate
 
 
-class AccountOrm(ModelTemplate):
-    __tablename__ = "fin_account"
-
-    owner_id: int
-
-
-# Properties to receive on item creation
-
-
-class AccountModel(BaseModel):
-    id: int
+class Account(ModelTemplate):
     name: str
-    owner_id: int
+    owner_id: str
 
     class Config:
         orm_mode = True
 
 
-class AccountView(AccountModel):
+class AccountView(Account):
     pass
 
 

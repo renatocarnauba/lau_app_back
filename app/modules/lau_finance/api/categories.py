@@ -27,7 +27,7 @@ async def read_categories_mine(
     """
     Retrieve categories Mine.
     """
-    categories = await crud.category.get_multi_by_owner(owner_id=int(current_user.id), skip=skip, limit=limit)
+    categories = await crud.category.get_multi_by_owner(owner_id=str(current_user.id), skip=skip, limit=limit)
     return categories
 
 
@@ -43,7 +43,7 @@ async def read_categories(
     if crud.user.is_superuser(current_user):
         categories = await crud.category.get_multi(skip=skip, limit=limit)
     else:
-        categories = await crud.category.get_multi_by_owner(owner_id=int(current_user.id), skip=skip, limit=limit)
+        categories = await crud.category.get_multi_by_owner(owner_id=str(current_user.id), skip=skip, limit=limit)
     return categories
 
 
@@ -56,14 +56,14 @@ async def create_category(
     """
     Create new category.
     """
-    category: CategoryOrm = await crud.category.create_with_owner(obj_in=category_in, owner_id=int(current_user.id))
+    category: CategoryOrm = await crud.category.create_with_owner(obj_in=category_in, owner_id=str(current_user.id))
     return category
 
 
 @router.put("/{id}", response_model=CategoryView)
 async def update_category(
     *,
-    id: int,
+    id: str,
     category_in: CategoryUpdate,
     current_user: models.User = Depends(depsAsync.get_current_active_user),
 ) -> Any:
@@ -83,7 +83,7 @@ async def update_category(
 @router.get("/{id}", response_model=CategoryView)
 async def read_category(
     *,
-    id: int,
+    id: str,
     current_user: models.User = Depends(depsAsync.get_current_active_user),
 ) -> Any:
     """
@@ -100,7 +100,7 @@ async def read_category(
 @router.delete("/{id}", response_model=CategoryView)
 async def delete_category(
     *,
-    id: int,
+    id: str,
     current_user: models.User = Depends(depsAsync.get_current_active_user),
 ) -> Any:
     """

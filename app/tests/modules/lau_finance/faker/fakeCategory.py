@@ -23,7 +23,7 @@ async def create_fake_category(data: dict[str, Any] | None = None) -> CategoryOr
     else:
         category_in = CategoryCreate(**fake_category_data())
     user = await create_fake_user()
-    category = await crud.category.create_with_owner(obj_in=category_in, owner_id=int(user.id))
+    category = await crud.category.create_with_owner(obj_in=category_in, owner_id=str(user.id))
     return category
 
 
