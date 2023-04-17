@@ -3,7 +3,7 @@ import pytest
 from app.config.integration import crud
 from app.modules.lau_finance.models.category import (
     CategoryCreate,
-    CategoryOrm,
+    Category,
     CategoryUpdate,
 )
 from app.tests.modules.lau_finance.faker.fakeCategory import (
@@ -19,7 +19,7 @@ async def test_create_category() -> None:
     user = await create_fake_user()
     category = await crud.category.create_with_owner(obj_in=category_in, owner_id=str(user.id))
     assert category.name == category_in.name
-    assert category.owner_id == user.id
+    assert category.owner_id == str(user.id)
 
 
 @pytest.mark.asyncio
@@ -38,7 +38,7 @@ async def test_update_category() -> None:
     category_update = CategoryUpdate(**fake_category_data(), id=category.id)
     category2 = await crud.category.update(db_obj=category, obj_in=category_update)
     assert category.id == category2.id
-    assert category.name == category2.name
+    assert category.name != category2.name
     assert category2.name == category_update.name
     assert category.owner_id == category2.owner_id
 
@@ -55,15 +55,15 @@ async def test_delete_category() -> None:
     categoryMantidaAposConsulta = await crud.category.get(id=categoryManter.id)
     assert categoryExcluidaAposConsulta is None
     assert categoryExcluida is not None
-    categoryExcluidaX: CategoryOrm = categoryExcluida
+    categoryExcluidaX: Category = categoryExcluida
     assert categoryExcluidaX.id == categoryExcluir.id
     assert categoryExcluidaX.name == category_in_excluir.name
-    assert categoryExcluidaX.owner_id == user.id
+    assert categoryExcluidaX.owner_id == str(user.id)
     assert categoryMantidaAposConsulta is not None
-    categoryMantidaAposConsultaX: CategoryOrm = categoryMantidaAposConsulta
+    categoryMantidaAposConsultaX: Category = categoryMantidaAposConsulta
     assert categoryMantidaAposConsultaX.id == categoryManter.id
     assert categoryMantidaAposConsultaX.name == category_in_manter.name
-    assert categoryMantidaAposConsultaX.owner_id == user.id
+    assert categoryMantidaAposConsultaX.owner_id == str(user.id)
 
 
 @pytest.mark.asyncio
@@ -77,7 +77,7 @@ async def test_create_category_parent() -> None:
     category_in.parent_id = categoryParent.id
     category = await crud.category.create_with_owner(obj_in=category_in, owner_id=str(user.id))
     assert category.name == category_in.name
-    assert category.owner_id == user.id
+    assert category.owner_id == str(user.id)
     assert category.parent_id == categoryParent.id
 
 
@@ -112,15 +112,15 @@ async def test_delete_category_parent() -> None:
     category_in.parent_id = categoryParent.id
     categoryChild = await crud.category.create_with_owner(obj_in=category_in, owner_id=str(user.id))
     assert categoryChild.name == category_in.name
-    assert categoryChild.owner_id == user.id
+    assert categoryChild.owner_id == str(user.id)
     assert categoryChild.parent_id == categoryParent.id
 
     categoryExcluida = await crud.category.remove(id=categoryParent.id)
     categoryExcluidaAposConsulta = await crud.category.get(id=categoryParent.id)
     assert categoryExcluidaAposConsulta is None
     assert categoryExcluida is not None
-    categoryExcluidaX: CategoryOrm = categoryExcluida
-    assert categoryExcluidaX.owner_id == user.id
+    categoryExcluidaX: Category = categoryExcluida
+    assert categoryExcluidaX.owner_id == str(user.id)
 
     categoryChildExcluidaAposConsulta = await crud.category.get(id=categoryChild.id)
     assert categoryChildExcluidaAposConsulta is None

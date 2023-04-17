@@ -6,7 +6,7 @@ from httpx import AsyncClient
 from app.config.integration import crud
 from app.config.settings import settings
 from app.main import app
-from app.modules.lau_finance.models.category import CategoryCreate, CategoryOrm
+from app.modules.lau_finance.models.category import CategoryCreate, Category
 from app.tests.utils.fakeUser import create_fake_user
 
 fake = Faker(["pt_BR"])
@@ -17,7 +17,7 @@ def fake_category_data() -> dict[str, Any]:
     return data
 
 
-async def create_fake_category(data: dict[str, Any] | None = None) -> CategoryOrm:
+async def create_fake_category(data: dict[str, Any] | None = None) -> Category:
     if data:
         category_in = CategoryCreate(**data)
     else:
@@ -27,7 +27,7 @@ async def create_fake_category(data: dict[str, Any] | None = None) -> CategoryOr
     return category
 
 
-async def create_fake_category_mine(token: dict[str, Any]) -> CategoryOrm:
+async def create_fake_category_mine(token: dict[str, Any]) -> Category:
     category_in = CategoryCreate(**fake_category_data())
     async with AsyncClient(app=app, base_url=f"{settings.SERVER_HOST}:{settings.SERVER_PORT}/") as ac:
         r = await ac.get(f"{settings.API_V1_STR}/users/me", headers=token)

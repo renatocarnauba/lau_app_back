@@ -70,6 +70,8 @@ class CRUDBaseAsync(Generic[Base, CreateSchemaType, UpdateSchemaType]):
             update_data = obj_in.dict(exclude_unset=True)
 
         coll = await self.coll
+        update_data=jsonable_encoder(update_data)
+        
         await coll.update_one({"id": str(obj_data["id"])}, {"$set": update_data})
         return await self.get(obj_data["id"])
 
@@ -78,7 +80,8 @@ class CRUDBaseAsync(Generic[Base, CreateSchemaType, UpdateSchemaType]):
             id = str(id)
         objFind = await self.get(id)
         coll = await self.coll
-        coll.delete_one({"id", id})
+        filterDel = {"id": id}
+        await coll.delete_one(filterDel)
         return objFind
 
 
@@ -100,7 +103,7 @@ class CRUDBaseMultiAsync(CRUDBaseAsync[Base, CreateSchemaType, UpdateSchemaType]
         return await self.mongo.async_get_collection(self.model.__tablename__)
 
     async def create_with_owner(self, *, obj_in: CreateSchemaType, owner_id: str) -> Base:
-        obj_in_data = obj_in.dict()
+        obj_in_data = jsonable_encoder(obj_in)
 
         if isinstance(owner_id, UUID):
             owner_id = str(owner_id)
@@ -117,11 +120,11 @@ class CRUDBaseMultiAsync(CRUDBaseAsync[Base, CreateSchemaType, UpdateSchemaType]
             return None
 
 
-async def get_multi_by_owner(self, *, owner_id: str, skip: int = 0, limit: int = 100):
-    if isinstance(owner_id, UUID):
-        owner_id = str(owner_id)
-    coll = await self.coll
-    cursor = coll.find({"owner_id": owner_id}, limit=limit, skip=skip)
-    listData = await cursor.to_list(length=100)
-    tbObj=[self.model(**data)for data in listData]
-    return tbObj
+    async def get_multi_by_owner(self, *, owner_id: str, skip: int = 0, limit: int = 100):
+        if isinstance(owner_id, UUID):
+            owner_id = str(owner_id)
+        coll = await self.coll
+        cursor = coll.find({"owner_id": owner_id}, limit=limit, skip=skip)
+        listData = await cursor.to_list(length=100)
+        tbObj=[self.model(**data)for data in listData]
+        return tbObj

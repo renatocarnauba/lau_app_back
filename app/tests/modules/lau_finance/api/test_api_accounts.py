@@ -1,9 +1,11 @@
+from pprint import pprint
 from typing import Any
 
 import pytest
 from httpx import AsyncClient
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.ext.asyncio.session import async_sessionmaker
+from fastapi.encoders import jsonable_encoder
 
 from app.config.integration import crud
 from app.config.settings import settings
@@ -39,7 +41,7 @@ async def test_retrieve_account_mine(
     for _ in range(5):
         act = await create_fake_account_mine( normaluser_token_headers)
         acctDict = dict(act.__dict__)
-        del acctDict["_sa_instance_state"]
+        acctDict = jsonable_encoder(acctDict)
         tbAccounts.append(acctDict)
 
     ValueStorage.tbAccounts = tbAccounts
@@ -49,6 +51,7 @@ async def test_retrieve_account_mine(
         )
         assert r.status_code == 200
         tbAccountsReceived = r.json()
+
         assert compare_two_lists(tbAccounts, tbAccountsReceived)
 
 
@@ -71,7 +74,7 @@ async def test_retrieve_account_superuser(
     for _ in range(5):
         act = await create_fake_account_mine( superuser_token_headers)
         acctDict = dict(act.__dict__)
-        del acctDict["_sa_instance_state"]
+        acctDict = jsonable_encoder(acctDict)
         tbAccounts.append(acctDict)
 
     async with AsyncClient(app=app, base_url=f"{settings.SERVER_HOST}:{settings.SERVER_PORT}/") as ac:

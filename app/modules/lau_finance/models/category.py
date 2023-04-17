@@ -1,40 +1,27 @@
 from typing import ForwardRef, Optional
 
-from pydantic import BaseModel
+from pydantic import UUID4, BaseModel
 
 from app.modules.lau_commons.core.pydanticObjectId import PydanticObjectId
 from app.modules.lau_commons.models.baseModel import ModelTemplate
 
-CategoryOrm = ForwardRef("CategoryOrm")
 
-
-class CategoryOrm(ModelTemplate):
+class Category(ModelTemplate):
+    __tablename__ = 'fin_category'
     name: str
     owner_id: str
-    parent_id: Optional[str]
-
-CategoryOrm.update_forward_refs()
-
-# Union[ForwardRef('CategoryOrm'), None].update_forward_refs()
-# Properties shared by models stored in DB
-
-
-class CategoryModel(BaseModel):
-    id: PydanticObjectId()
-    name: str
-    owner_id: str
-    parent_id: Optional[str]
+    parent_id: Optional[UUID4]
 
 
 # Properties to return to client
-class CategoryView(CategoryModel):
+class CategoryView(Category):
     pass
 
 
 # Properties to receive on item update
 class CategoryUpdate(BaseModel):
     name: Optional[str] = None
-    parent_id: Optional[str]
+    parent_id: Optional[UUID4]
 
 
 # Properties to receive on item creation
@@ -42,4 +29,4 @@ class CategoryUpdate(BaseModel):
 
 class CategoryCreate(BaseModel):
     name: str
-    parent_id: Optional[str] = None
+    parent_id: Optional[UUID4] = None

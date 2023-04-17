@@ -10,7 +10,7 @@ from app.modules.lau_commons.core.exceptions import (
 )
 from app.modules.lau_finance.models.category import (
     CategoryCreate,
-    CategoryOrm,
+    Category,
     CategoryUpdate,
     CategoryView,
 )
@@ -56,7 +56,7 @@ async def create_category(
     """
     Create new category.
     """
-    category: CategoryOrm = await crud.category.create_with_owner(obj_in=category_in, owner_id=str(current_user.id))
+    category: Category = await crud.category.create_with_owner(obj_in=category_in, owner_id=str(current_user.id))
     return category
 
 

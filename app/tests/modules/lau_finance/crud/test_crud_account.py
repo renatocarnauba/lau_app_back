@@ -40,7 +40,7 @@ async def test_update_account() -> None:
     account_update = AccountUpdate(**fake_account_data())
     account2 = await crud.account.update( db_obj=account, obj_in=account_update)
     assert account.id == account2.id
-    assert account.name == account2.name
+    assert account.name != account2.name
     assert account2.name == account_update.name
     assert account.owner_id == account2.owner_id
 
@@ -57,16 +57,18 @@ async def test_delete_account() -> None:
          obj_in=account_in_manter, owner_id=str(user.id)
     )
     accountExcluida = await crud.account.remove( id=str(accountExcluir.id))
-    accountExcluidaAposConsulta = await crud.account.get( id=accountExcluir.id)
-    accountMantidaAposConsulta = await crud.account.get( id=accountManter.id)
+    print(accountExcluir.id)
+    accountExcluidaAposConsulta = await crud.account.get(id=accountExcluir.id)
+    print(accountManter.id)
+    accountMantidaAposConsulta = await crud.account.get(id=accountManter.id)
     assert accountExcluidaAposConsulta is None
     assert accountExcluida is not None
     accountExcluidaX: Account = accountExcluida
     assert accountExcluidaX.id == accountExcluir.id
     assert accountExcluidaX.name == account_in_excluir.name
-    assert accountExcluidaX.owner_id == user.id
+    assert accountExcluidaX.owner_id == str(user.id)
     assert accountMantidaAposConsulta is not None
     accountMantidaAposConsultaX: Account = accountMantidaAposConsulta
     assert accountMantidaAposConsultaX.id == accountManter.id
     assert accountMantidaAposConsultaX.name == account_in_manter.name
-    assert accountMantidaAposConsultaX.owner_id == user.id
+    assert accountMantidaAposConsultaX.owner_id == str(user.id)
