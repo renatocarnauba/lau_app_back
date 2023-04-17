@@ -1,19 +1,17 @@
-from typing import ForwardRef, Optional, Union
+from typing import ForwardRef, Optional
 
 from pydantic import BaseModel
 
-from app.core.pydanticObjectId import PydanticObjectId
+from app.modules.lau_commons.core.pydanticObjectId import PydanticObjectId
+from app.modules.lau_commons.models.baseModel import ModelTemplate
+
+CategoryOrm = ForwardRef("CategoryOrm")
 
 
-CategoryOrm = ForwardRef('CategoryOrm')
-
-class CategoryOrm(BaseModel):
+class CategoryOrm(ModelTemplate):
     name: str
     owner_id: int
-    parent_id: Optional[PydanticObjectId]
-
-    class Config:
-        collection = "fin_category"
+    parent_id: Optional[int]
 
 CategoryOrm.update_forward_refs()
 
@@ -25,7 +23,7 @@ class CategoryModel(BaseModel):
     id: PydanticObjectId()
     name: str
     owner_id: int
-    parent_id: Optional[PydanticObjectId]
+    parent_id: Optional[int]
 
 
 # Properties to return to client
@@ -34,9 +32,9 @@ class CategoryView(CategoryModel):
 
 
 # Properties to receive on item update
-class CategoryUpdate(Model):
+class CategoryUpdate(BaseModel):
     name: Optional[str] = None
-    parent_id: Optional[ObjectId]
+    parent_id: Optional[int]
 
 
 # Properties to receive on item creation
@@ -44,4 +42,4 @@ class CategoryUpdate(Model):
 
 class CategoryCreate(BaseModel):
     name: str
-    parent_id: Optional[ObjectId] = None
+    parent_id: Optional[int] = None

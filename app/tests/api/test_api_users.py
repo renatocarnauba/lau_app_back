@@ -2,13 +2,15 @@ from typing import Any, Dict
 
 import pytest
 from httpx import AsyncClient
-from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy.ext.asyncio.session import async_sessionmaker
 
 from app.config.integration import crud
 from app.config.settings import settings
-from app.core.exceptions import UserAlreadyExists, UserNotFound, UserWithoutPrivileges
 from app.main import app
+from app.modules.lau_commons.core.exceptions import (
+    UserAlreadyExists,
+    UserNotFound,
+    UserWithoutPrivileges,
+)
 from app.tests.utils.fakeUser import create_fake_user, fake_user_data
 from app.tests.utils.utils import check_error_class
 
@@ -25,14 +27,14 @@ async def test_get_users_me_superuser(superuser_token_headers: Dict[str, str]) -
 
 @pytest.mark.anyio
 async def test_get_existing_user(
-    superuser_token_headers: dict[str, Any], asyncSection: async_sessionmaker[AsyncSession]
+    superuser_token_headers: dict[str, Any]
 ) -> None:
-    user = await create_fake_user(asyncSection=asyncSection)
+    user = await create_fake_user()
     async with AsyncClient(app=app, base_url=f"{settings.SERVER_HOST}:{settings.SERVER_PORT}/") as ac:
         r = await ac.get(f"{settings.API_V1_STR}/users/{user.id}", headers=superuser_token_headers)
         assert 200 <= r.status_code < 300
         api_user = r.json()
-        existing_user = await crud.user.get_by_email(asyncSection=asyncSection, email=str(user.email))
+        existing_user = await crud.user.get_by_email( email=str(user.email))
         assert existing_user
         assert existing_user.email == api_user["email"]
 
@@ -56,9 +58,9 @@ async def test_get_existing_user_me(superuser_token_headers: dict[str, Any]) -> 
 
 @pytest.mark.anyio
 async def test_get_existing_user_when_not_superuser(
-    normaluser_token_headers: dict[str, Any], asyncSection: async_sessionmaker[AsyncSession]
+    normaluser_token_headers: dict[str, Any]
 ) -> None:
-    user = await create_fake_user(asyncSection=asyncSection)
+    user = await create_fake_user()
 
     async with AsyncClient(app=app, base_url=f"{settings.SERVER_HOST}:{settings.SERVER_PORT}/") as ac:
         r = await ac.get(f"{settings.API_V1_STR}/users/{user.id}", headers=normaluser_token_headers)
@@ -67,10 +69,10 @@ async def test_get_existing_user_when_not_superuser(
 
 @pytest.mark.anyio
 async def test_create_user_existing_username(
-    superuser_token_headers: dict[str, Any], asyncSection: async_sessionmaker[AsyncSession]
+    superuser_token_headers: dict[str, Any]
 ) -> None:
     userData = fake_user_data()
-    await create_fake_user(asyncSection=asyncSection, data=userData)
+    await create_fake_user( data=userData)
 
     async with AsyncClient(app=app, base_url=f"{settings.SERVER_HOST}:{settings.SERVER_PORT}/") as ac:
         r = await ac.post(f"{settings.API_V1_STR}/users/", headers=superuser_token_headers, json=userData)
@@ -81,10 +83,10 @@ async def test_create_user_existing_username(
 
 @pytest.mark.anyio
 async def test_retrieve_users(
-    superuser_token_headers: dict[str, Any], asyncSection: async_sessionmaker[AsyncSession]
+    superuser_token_headers: dict[str, Any]
 ) -> None:
-    await create_fake_user(asyncSection=asyncSection)
-    await create_fake_user(asyncSection=asyncSection)
+    await create_fake_user()
+    await create_fake_user()
 
     async with AsyncClient(app=app, base_url=f"{settings.SERVER_HOST}:{settings.SERVER_PORT}/") as ac:
         r = await ac.get(f"{settings.API_V1_STR}/users/", headers=superuser_token_headers)
@@ -96,10 +98,10 @@ async def test_retrieve_users(
 
 @pytest.mark.anyio
 async def test_update_user(
-    superuser_token_headers: dict[str, Any], asyncSection: async_sessionmaker[AsyncSession]
+    superuser_token_headers: dict[str, Any]
 ) -> None:
     data = fake_user_data()
-    user = await create_fake_user(asyncSection=asyncSection, data=data)
+    user = await create_fake_user( data=data)
 
     data["is_active"] = False
 
@@ -110,7 +112,7 @@ async def test_update_user(
             json=data,
         )
     assert 200 <= r.status_code < 300
-    userRetrieved = await crud.user.get_by_email(asyncSection=asyncSection, email=data["email"])
+    userRetrieved = await crud.user.get_by_email( email=data["email"])
     assert userRetrieved
     assert not userRetrieved.is_active
 

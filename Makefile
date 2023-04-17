@@ -26,7 +26,7 @@ start-docker:	stop-docker
 stop-docker:
 	docker-compose -f compose/compose.yml down 
 
-test:	remove-test-data-initial clean-cache pytest	remove-test-data
+test:	init-data remove-test-data-initial clean-cache pytest	remove-test-data
 
 pytest:
 	@pytest -m "not draft" -vv 

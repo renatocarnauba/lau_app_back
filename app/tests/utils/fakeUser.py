@@ -1,12 +1,10 @@
 from typing import Any
 
 from faker import Faker
-from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy.ext.asyncio.session import async_sessionmaker
 
 from app.config.integration import crud
-from app.models.sql.user import User
-from app.schemas.user import UserCreate
+from app.config.integration.models import User
+from app.config.integration.schemas import UserCreate
 
 fake = Faker(["pt_BR"])
 
@@ -32,7 +30,6 @@ def fake_user_data(superUser: bool = False, active: bool = True) -> dict[str, An
 
 
 async def create_fake_user(
-    asyncSection: async_sessionmaker[AsyncSession],
     superUser: bool = False,
     active: bool = True,
     data: dict[str, Any] | None = None,
@@ -42,5 +39,5 @@ async def create_fake_user(
     else:
         user_in = UserCreate(**fake_user_data(superUser, active=active))
 
-    user = await crud.user.create(asyncSection=asyncSection, obj_in=user_in)
+    user = await crud.user.create(obj_in=user_in)
     return user

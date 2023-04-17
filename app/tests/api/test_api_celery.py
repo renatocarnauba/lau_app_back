@@ -3,7 +3,7 @@
 # import pytest
 # from httpx import AsyncClient
 
-# from app.core.config import settings
+# from app.modules.lau_commons.core.config import settings
 # from app.main import app
 
 

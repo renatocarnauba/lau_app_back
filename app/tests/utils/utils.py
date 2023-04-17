@@ -6,10 +6,9 @@ from httpx import AsyncClient, Response
 
 from app.config.integration import crud
 from app.config.settings import settings
-from app.core.exceptions import ErrorBase
-from app.db.sessionAsync import sessionLocal as asyncSection
 from app.main import app
-from app.schemas.user import UserCreate
+from app.modules.lau_commons.core.exceptions import ErrorBase
+from app.modules.lau_commons.models.user import UserCreate
 from app.tests.utils.fakeUser import fake_user_data
 
 fake = Faker(["pt_BR"])
@@ -53,7 +52,7 @@ def genHeader(r: Response) -> Dict[str, str]:
 @pytest.mark.anyio
 async def get_superuser_token_headers() -> Dict[str, str]:
     user_in = UserCreate(**fake_user_data(superUser=True))
-    await crud.user.create(asyncSection, obj_in=user_in)
+    await crud.user.create(obj_in=user_in)
     login_data = {
         "username": user_in.email,
         "password": user_in.password,
@@ -66,7 +65,7 @@ async def get_superuser_token_headers() -> Dict[str, str]:
 @pytest.mark.anyio
 async def get_normaluser_token_headers() -> Dict[str, str]:
     user_in = UserCreate(**fake_user_data())
-    await crud.user.create(asyncSection, obj_in=user_in)
+    await crud.user.create(obj_in=user_in)
     login_data = {
         "username": user_in.email,
         "password": user_in.password,

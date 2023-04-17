@@ -2,6 +2,8 @@ from typing import Optional
 
 from pydantic import BaseModel, EmailStr
 
+from app.modules.lau_commons.models.baseModel import ModelTemplate
+
 
 # Shared properties
 class UserBase(BaseModel):
@@ -22,19 +24,12 @@ class UserCreate(UserBase):
 class UserUpdate(UserBase):
     password: Optional[str] = None
 
+class UserView(ModelTemplate, UserBase):
+    ...
 
-class UserInDBBase(UserBase):
-    id: Optional[int] = None
-
+# Additional properties to return via API
+class User(ModelTemplate, UserBase):
+    hashed_password: str
     class Config:
         orm_mode = True
 
-
-# Additional properties to return via API
-class User(UserInDBBase):
-    pass
-
-
-# Additional properties stored in DB
-class UserInDB(UserInDBBase):
-    hashed_password: str

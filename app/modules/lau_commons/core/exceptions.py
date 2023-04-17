@@ -58,6 +58,7 @@ class CategoryNotFound(HTTPException):
         detail = "Category not found"
         super().__init__(status_code=status_code, detail=detail)
 
+
 ErrorBase = (
     Type[UserNotFound]
     | Type[UserWithoutPrivileges]

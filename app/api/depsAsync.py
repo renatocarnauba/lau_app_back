@@ -1,34 +1,24 @@
-from typing import Iterator
-
 from fastapi import Depends
 from fastapi.security import OAuth2PasswordBearer
 from jose import jwt
 from jose.exceptions import JWTError
 from pydantic import ValidationError
-from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy.ext.asyncio.session import async_sessionmaker
 
-from app import schemas
 from app.config.integration import crud, models
+from app.config.integration import schemas
 from app.config.settings import settings
-from app.core import security
-from app.core.exceptions import (
+from app.modules.lau_commons.core import security
+from app.modules.lau_commons.core.exceptions import (
     InvalidCredential,
     UserInactive,
     UserNotFound,
     UserWithoutPrivileges,
 )
-from app.db.sessionAsync import sessionLocal
 
 reusable_oauth2 = OAuth2PasswordBearer(tokenUrl=f"{settings.API_V1_STR}/login/access-token")
 
 
-def get_asyncSection() -> Iterator[async_sessionmaker[AsyncSession]]:
-    yield sessionLocal
-
-
 async def get_current_user(
-    asyncSection: async_sessionmaker[AsyncSession] = Depends(get_asyncSection),
     token: str = Depends(reusable_oauth2),
 ) -> models.User:
     try:
@@ -36,7 +26,7 @@ async def get_current_user(
         token_data = schemas.TokenPayload(**payload)
     except (JWTError, ValidationError):  # pragma: no cover
         raise InvalidCredential()  # pragma: no cover
-    user = await crud.user.get(asyncSection, id=token_data.sub)
+    user = await crud.user.get(id=token_data.sub)
     if not user:
         raise UserNotFound()  # pragma: no cover
     return user

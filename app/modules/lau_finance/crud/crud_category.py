@@ -1,5 +1,5 @@
-from app.crud.baseAsyncMongo import CRUDBaseMultiAsync
-from app.modules.lau_finance.models.nosql.category import (
+from app.modules.lau_commons.crud.baseAsync import CRUDBaseMultiAsync
+from app.modules.lau_finance.models.category import (
     CategoryCreate,
     CategoryOrm,
     CategoryUpdate,

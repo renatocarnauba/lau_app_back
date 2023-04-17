@@ -7,8 +7,8 @@ from sqlalchemy.ext.asyncio.session import async_sessionmaker
 
 from app.config.integration import crud
 from app.config.settings import settings
-from app.core.exceptions import LoginFail, UserInactive
 from app.main import app
+from app.modules.lau_commons.core.exceptions import LoginFail, UserInactive
 from app.tests.utils.fakeUser import fake_user_data
 from app.tests.utils.utils import check_error_class
 
@@ -40,7 +40,7 @@ async def test_get_access_user_invalido() -> None:
 
 @pytest.mark.anyio
 async def test_get_access_user_inativo(
-    superuser_token_headers: dict[str, Any], asyncSection: async_sessionmaker[AsyncSession]
+    superuser_token_headers: dict[str, Any]
 ) -> None:
     data = fake_user_data()
     async with AsyncClient(app=app, base_url=f"{settings.SERVER_HOST}:{settings.SERVER_PORT}/") as ac:
@@ -51,7 +51,7 @@ async def test_get_access_user_inativo(
         )
         assert 200 <= r.status_code < 300
         created_user = r.json()
-        user = await crud.user.get_by_email(asyncSection=asyncSection, email=data["username"])
+        user = await crud.user.get_by_email( email=data["username"])
         assert user
         assert user.email == created_user["email"]
         data["is_active"] = False

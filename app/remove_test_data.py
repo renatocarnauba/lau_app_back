@@ -2,7 +2,6 @@ import asyncio
 import logging
 
 from app.config.integration import crud
-from app.db.sessionAsync import sessionLocal as sessionLocalAsync
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -13,7 +12,7 @@ def init() -> None:
 
 
 async def remove_test_data() -> None:
-    await crud.user.remove_test(sessionLocalAsync)
+    await crud.user.remove_test()
     return None
 
 

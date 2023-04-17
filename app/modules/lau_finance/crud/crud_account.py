@@ -1,5 +1,5 @@
-from app.crud.baseAsync import CRUDBaseMultiAsync
-from app.modules.lau_finance.models.sql.account import (
+from app.modules.lau_commons.crud.baseAsync import CRUDBaseMultiAsync
+from app.modules.lau_finance.models.account import (
     AccountCreate,
     AccountOrm,
     AccountUpdate,
