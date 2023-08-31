@@ -45,7 +45,7 @@ class CRUDUser(CRUDBaseAsync[User, UserCreate, UserUpdate]):
 
     async def update(self, *, db_obj: User, obj_in: UserUpdate | dict[str, Any]) -> User:
         if isinstance(obj_in, dict):
-            update_data = obj_in  # pragma: no cover
+            update_data = obj_in
         else:
             update_data = obj_in.dict(exclude_unset=True)
         if update_data["password"]:
@@ -59,7 +59,7 @@ class CRUDUser(CRUDBaseAsync[User, UserCreate, UserUpdate]):
         if not user:
             return None
         if not verify_password(password, str(user.hashed_password)):
-            return None  # pragma: no cover
+            return None
         return user
 
     def is_active(self, user: User) -> bool:

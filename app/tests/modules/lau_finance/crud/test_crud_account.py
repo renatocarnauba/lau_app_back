@@ -10,6 +10,7 @@ from app.tests.utils.fakeUser import create_fake_user
 
 
 @pytest.mark.asyncio
+@pytest.mark.crud
 async def test_create_account() -> None:
     account_in = AccountCreate(**fake_account_data())
     user = await create_fake_user()
@@ -19,6 +20,7 @@ async def test_create_account() -> None:
 
 
 @pytest.mark.asyncio
+@pytest.mark.crud
 async def test_get_account() -> None:
     account = await create_fake_account()
     stored_account = await crud.account.get(id=account.id)
@@ -29,6 +31,7 @@ async def test_get_account() -> None:
 
 
 @pytest.mark.asyncio
+@pytest.mark.crud
 async def test_update_account() -> None:
     account = await create_fake_account()
     account_update = AccountUpdate(**fake_account_data())
@@ -40,6 +43,7 @@ async def test_update_account() -> None:
 
 
 @pytest.mark.asyncio
+@pytest.mark.crud
 async def test_delete_account() -> None:
     account_in_manter = AccountCreate(**fake_account_data())
     account_in_excluir = AccountCreate(**fake_account_data())
@@ -47,9 +51,7 @@ async def test_delete_account() -> None:
     accountExcluir = await crud.account.create_with_owner(obj_in=account_in_excluir, owner_id=str(user.id))
     accountManter = await crud.account.create_with_owner(obj_in=account_in_manter, owner_id=str(user.id))
     accountExcluida = await crud.account.remove(id=str(accountExcluir.id))
-    print(accountExcluir.id)
     accountExcluidaAposConsulta = await crud.account.get(id=accountExcluir.id)
-    print(accountManter.id)
     accountMantidaAposConsulta = await crud.account.get(id=accountManter.id)
     assert accountExcluidaAposConsulta is None
     assert accountExcluida is not None

@@ -31,6 +31,7 @@ class ValueStorage:
 
 
 @pytest.mark.anyio
+@pytest.mark.api
 async def test_retrieve_category_mine(normaluser_token_headers: dict[str, Any]) -> None:
     tbCategories = []
     for _ in range(5):
@@ -53,6 +54,7 @@ async def test_retrieve_category_mine(normaluser_token_headers: dict[str, Any]) 
 
 
 @pytest.mark.anyio
+@pytest.mark.api
 async def test_retrieve_category_normaluser(normaluser_token_headers: dict[str, Any]) -> None:
     tbCategories = ValueStorage.tbCategories
 
@@ -68,6 +70,7 @@ async def test_retrieve_category_normaluser(normaluser_token_headers: dict[str, 
 
 
 @pytest.mark.anyio
+@pytest.mark.api
 async def test_retrieve_category_superuser(superuser_token_headers: dict[str, Any]) -> None:
     tbCategories = []
     for _ in range(5):
@@ -86,6 +89,7 @@ async def test_retrieve_category_superuser(superuser_token_headers: dict[str, An
 
 
 @pytest.mark.anyio
+@pytest.mark.api
 async def test_create_category(normaluser_token_headers: dict[str, Any]) -> None:
     async with AsyncClient(
         app=app, base_url=f"{str(settings.SERVER_HOST).removesuffix('/')}:{settings.SERVER_PORT}/"
@@ -102,6 +106,7 @@ async def test_create_category(normaluser_token_headers: dict[str, Any]) -> None
 
 
 @pytest.mark.anyio
+@pytest.mark.api
 async def test_update_category(superuser_token_headers: dict[str, Any]) -> None:
     data = fake_category_data()
     category = await create_fake_category(data=data)
@@ -124,6 +129,7 @@ async def test_update_category(superuser_token_headers: dict[str, Any]) -> None:
 
 
 @pytest.mark.anyio
+@pytest.mark.api
 async def test_update_category_user_without_privilegies(normaluser_token_headers: dict[str, Any]) -> None:
     data = fake_category_data()
     category = await create_fake_category(data=data)
@@ -142,6 +148,7 @@ async def test_update_category_user_without_privilegies(normaluser_token_headers
 
 
 @pytest.mark.anyio
+@pytest.mark.api
 async def test_update_category_notFound(superuser_token_headers: dict[str, Any]) -> None:
     async with AsyncClient(
         app=app, base_url=f"{str(settings.SERVER_HOST).removesuffix('/')}:{settings.SERVER_PORT}/"
@@ -155,6 +162,7 @@ async def test_update_category_notFound(superuser_token_headers: dict[str, Any])
 
 
 @pytest.mark.anyio
+@pytest.mark.api
 async def test_delete_category(superuser_token_headers: dict[str, Any]) -> None:
     data = fake_category_data()
     category = await create_fake_category(data=data)
@@ -175,6 +183,7 @@ async def test_delete_category(superuser_token_headers: dict[str, Any]) -> None:
 
 
 @pytest.mark.anyio
+@pytest.mark.api
 async def test_delete_category_user_without_privilegies(normaluser_token_headers: dict[str, Any]) -> None:
     data = fake_category_data()
     category = await create_fake_category(data=data)
@@ -192,6 +201,7 @@ async def test_delete_category_user_without_privilegies(normaluser_token_headers
 
 
 @pytest.mark.anyio
+@pytest.mark.api
 async def test_delete_category_notFound(superuser_token_headers: dict[str, Any]) -> None:
     async with AsyncClient(
         app=app, base_url=f"{str(settings.SERVER_HOST).removesuffix('/')}:{settings.SERVER_PORT}/"
@@ -204,6 +214,7 @@ async def test_delete_category_notFound(superuser_token_headers: dict[str, Any])
 
 
 @pytest.mark.anyio
+@pytest.mark.api
 async def test_get_category(superuser_token_headers: dict[str, Any]) -> None:
     data = fake_category_data()
     category = await create_fake_category(data=data)
@@ -223,6 +234,7 @@ async def test_get_category(superuser_token_headers: dict[str, Any]) -> None:
 
 
 @pytest.mark.anyio
+@pytest.mark.api
 async def test_get_category_user_without_privilegies(normaluser_token_headers: dict[str, Any]) -> None:
     data = fake_category_data()
     category = await create_fake_category(data=data)
@@ -240,6 +252,7 @@ async def test_get_category_user_without_privilegies(normaluser_token_headers: d
 
 
 @pytest.mark.anyio
+@pytest.mark.api
 async def test_get_category_notFound(superuser_token_headers: dict[str, Any]) -> None:
     async with AsyncClient(
         app=app, base_url=f"{str(settings.SERVER_HOST).removesuffix('/')}:{settings.SERVER_PORT}/"

@@ -23,18 +23,18 @@ async def get_current_user(
     try:
         payload = jwt.decode(token, settings.SECRET_KEY, algorithms=[security.ALGORITHM])
         token_data = schemas.TokenPayload(**payload)
-    except (JWTError, ValidationError):  # pragma: no cover
-        raise InvalidCredential()  # pragma: no cover
+    except (JWTError, ValidationError):
+        raise InvalidCredential()
     user = await crud.user.get(id=token_data.sub)
     if not user:
-        raise UserNotFound()  # pragma: no cover
+        raise UserNotFound()
     return user
 
 
 def get_current_active_user(
     current_user: models.User = Depends(get_current_user),
 ) -> models.User:
-    if not crud.user.is_active(current_user):  # pragma: no cover
+    if not crud.user.is_active(current_user):
         raise UserInactive()
     return current_user
 
@@ -42,6 +42,6 @@ def get_current_active_user(
 def get_current_active_superuser(
     current_user: models.User = Depends(get_current_user),
 ) -> models.User:
-    if not crud.user.is_superuser(current_user):  # pragma: no cover
+    if not crud.user.is_superuser(current_user):
         raise UserWithoutPrivileges()
     return current_user

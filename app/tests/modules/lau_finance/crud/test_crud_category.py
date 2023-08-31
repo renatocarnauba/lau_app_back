@@ -14,6 +14,7 @@ from app.tests.utils.fakeUser import create_fake_user
 
 
 @pytest.mark.asyncio
+@pytest.mark.crud
 async def test_create_category() -> None:
     category_in = CategoryCreate(**fake_category_data())
     user = await create_fake_user()
@@ -23,6 +24,7 @@ async def test_create_category() -> None:
 
 
 @pytest.mark.asyncio
+@pytest.mark.crud
 async def test_get_category() -> None:
     category = await create_fake_category()
     stored_category = await crud.category.get(id=category.id)
@@ -33,6 +35,7 @@ async def test_get_category() -> None:
 
 
 @pytest.mark.asyncio
+@pytest.mark.crud
 async def test_update_category() -> None:
     category = await create_fake_category()
     category_update = CategoryUpdate(**fake_category_data(), id=category.id)
@@ -44,6 +47,7 @@ async def test_update_category() -> None:
 
 
 @pytest.mark.asyncio
+@pytest.mark.crud
 async def test_delete_category() -> None:
     category_in_manter = CategoryCreate(**fake_category_data())
     category_in_excluir = CategoryCreate(**fake_category_data())
@@ -67,6 +71,7 @@ async def test_delete_category() -> None:
 
 
 @pytest.mark.asyncio
+@pytest.mark.crud
 async def test_create_category_parent() -> None:
     category_in_parent = CategoryCreate(**fake_category_data())
 
@@ -82,6 +87,7 @@ async def test_create_category_parent() -> None:
 
 
 @pytest.mark.asyncio
+@pytest.mark.crud
 async def test_update_category_parent() -> None:
     # Cria pais
     categoryParentFrom = await create_fake_category()
@@ -103,6 +109,7 @@ async def test_update_category_parent() -> None:
 
 
 @pytest.mark.asyncio
+@pytest.mark.crud
 async def test_delete_category_parent() -> None:
     category_in_parent = CategoryCreate(**fake_category_data())
     user = await create_fake_user()

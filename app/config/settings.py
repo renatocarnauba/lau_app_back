@@ -31,10 +31,10 @@ class Settings(BaseSettings):
     @classmethod
     def assemble_cors_origins(cls, v: Union[str, List[str]]) -> Union[List[str], str]:
         if isinstance(v, str) and not v.startswith("["):
-            return [i.strip() for i in v.split(",")]  # pragma: no cover
+            return [i.strip() for i in v.split(",")]
         elif isinstance(v, (list, str)):
             return v
-        raise ValueError(v)  # pragma: no cover
+        raise ValueError(v)
 
     PROJECT_NAME: str
     SENTRY_DSN: Optional[HttpUrl] = None
@@ -43,7 +43,7 @@ class Settings(BaseSettings):
     @classmethod
     def sentry_dsn_can_be_blank(cls, v: str) -> Optional[str]:
         if len(v) == 0:
-            return None  # pragma: no cover
+            return None
         return v
 
     POSTGRES_SERVER: str
@@ -58,7 +58,7 @@ class Settings(BaseSettings):
     @validator("SQLALCHEMY_DATABASE_URI", pre=True)
     def assemble_db_connection(cls, v: Optional[str], values: Dict[str, Any]) -> Any:
         if isinstance(v, str):
-            return v  # pragma: no cover
+            return v
         return PostgresDsn.build(
             scheme="postgresql",
             username=values.get("POSTGRES_USER"),
@@ -73,7 +73,7 @@ class Settings(BaseSettings):
     @validator("SQLALCHEMY_DATABASE_URI_ASYNC", pre=True)
     def assemble_db_connection_async(cls, v: Optional[str], values: Dict[str, Any]) -> Any:
         if isinstance(v, str):
-            return v  # pragma: no cover
+            return v
         return PostgresDsn.build(
             scheme="postgresql+asyncpg",
             username=values.get("POSTGRES_USER"),
@@ -97,7 +97,7 @@ class Settings(BaseSettings):
     def get_project_name(cls, v: Optional[str], values: Dict[str, Any]) -> str:
         if not v:
             return values["PROJECT_NAME"]
-        return v  # pragma: no cover
+        return v
 
     EMAIL_RESET_TOKEN_EXPIRE_HOURS: int = 48
     EMAIL_TEMPLATES_DIR: str = "app/email-templates/build"

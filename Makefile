@@ -37,15 +37,17 @@ generate-func:
 
 lint: format
 	@black app --check
-	@flake8
+	@flake8 app
+
 mypy:
 	@mypy app
+
 format:
-	@autopep8 app -r --in-place
+	@autopep8 . -r --in-place
 	@isort --force-single-line-imports .
-	@autoflake --remove-all-unused-imports --recursive --remove-unused-variables --in-place app --exclude=__init__.py
+	@autoflake --remove-all-unused-imports --recursive --remove-unused-variables --in-place . 
 	@isort .
-	@black app
+	@black .
 
 coverage:
 	rm -Rf htmlcov

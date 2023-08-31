@@ -38,7 +38,7 @@ class LoginFail(HTTPException):
         super().__init__(status_code=status_code, detail=detail)
 
 
-class InvalidCredential(HTTPException):  # pragma: no cover
+class InvalidCredential(HTTPException):
     def __init__(self) -> None:
         status_code = 403
         detail = "Could not validate credentials"

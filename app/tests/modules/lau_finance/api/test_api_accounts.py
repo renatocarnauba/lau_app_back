@@ -31,6 +31,7 @@ class ValueStorage:
 
 
 @pytest.mark.anyio
+@pytest.mark.api
 async def test_retrieve_account_mine(normaluser_token_headers: dict[str, Any]) -> None:
     tbAccounts = []
     for _ in range(5):
@@ -53,6 +54,7 @@ async def test_retrieve_account_mine(normaluser_token_headers: dict[str, Any]) -
 
 
 @pytest.mark.anyio
+@pytest.mark.api
 async def test_retrieve_account_normaluser(normaluser_token_headers: dict[str, Any]) -> None:
     tbAccounts = ValueStorage.tbAccounts
 
@@ -66,6 +68,7 @@ async def test_retrieve_account_normaluser(normaluser_token_headers: dict[str, A
 
 
 @pytest.mark.anyio
+@pytest.mark.api
 async def test_retrieve_account_superuser(superuser_token_headers: dict[str, Any]) -> None:
     tbAccounts = []
     for _ in range(5):
@@ -84,6 +87,7 @@ async def test_retrieve_account_superuser(superuser_token_headers: dict[str, Any
 
 
 @pytest.mark.anyio
+@pytest.mark.api
 async def test_create_account(normaluser_token_headers: dict[str, Any]) -> None:
     async with AsyncClient(
         app=app, base_url=f"{str(settings.SERVER_HOST).removesuffix('/')}:{settings.SERVER_PORT}/"
@@ -100,6 +104,7 @@ async def test_create_account(normaluser_token_headers: dict[str, Any]) -> None:
 
 
 @pytest.mark.anyio
+@pytest.mark.api
 async def test_update_account(superuser_token_headers: dict[str, Any]) -> None:
     data = fake_account_data()
     account = await create_fake_account(data=data)
@@ -122,6 +127,7 @@ async def test_update_account(superuser_token_headers: dict[str, Any]) -> None:
 
 
 @pytest.mark.anyio
+@pytest.mark.api
 async def test_update_account_user_without_privilegies(normaluser_token_headers: dict[str, Any]) -> None:
     data = fake_account_data()
     account = await create_fake_account(data=data)
@@ -140,6 +146,7 @@ async def test_update_account_user_without_privilegies(normaluser_token_headers:
 
 
 @pytest.mark.anyio
+@pytest.mark.api
 async def test_update_account_notFound(superuser_token_headers: dict[str, Any]) -> None:
     async with AsyncClient(
         app=app, base_url=f"{str(settings.SERVER_HOST).removesuffix('/')}:{settings.SERVER_PORT}/"
@@ -153,6 +160,7 @@ async def test_update_account_notFound(superuser_token_headers: dict[str, Any]) 
 
 
 @pytest.mark.anyio
+@pytest.mark.api
 async def test_delete_account(superuser_token_headers: dict[str, Any]) -> None:
     data = fake_account_data()
     account = await create_fake_account(data=data)
@@ -173,6 +181,7 @@ async def test_delete_account(superuser_token_headers: dict[str, Any]) -> None:
 
 
 @pytest.mark.anyio
+@pytest.mark.api
 async def test_delete_account_user_without_privilegies(normaluser_token_headers: dict[str, Any]) -> None:
     data = fake_account_data()
     account = await create_fake_account(data=data)
@@ -190,6 +199,7 @@ async def test_delete_account_user_without_privilegies(normaluser_token_headers:
 
 
 @pytest.mark.anyio
+@pytest.mark.api
 async def test_delete_account_notFound(superuser_token_headers: dict[str, Any]) -> None:
     async with AsyncClient(
         app=app, base_url=f"{str(settings.SERVER_HOST).removesuffix('/')}:{settings.SERVER_PORT}/"
@@ -202,6 +212,7 @@ async def test_delete_account_notFound(superuser_token_headers: dict[str, Any]) 
 
 
 @pytest.mark.anyio
+@pytest.mark.api
 async def test_get_account(superuser_token_headers: dict[str, Any]) -> None:
     data = fake_account_data()
     account = await create_fake_account(data=data)
@@ -221,6 +232,7 @@ async def test_get_account(superuser_token_headers: dict[str, Any]) -> None:
 
 
 @pytest.mark.anyio
+@pytest.mark.api
 async def test_get_account_user_without_privilegies(normaluser_token_headers: dict[str, Any]) -> None:
     data = fake_account_data()
     account = await create_fake_account(data=data)
@@ -238,6 +250,7 @@ async def test_get_account_user_without_privilegies(normaluser_token_headers: di
 
 
 @pytest.mark.anyio
+@pytest.mark.api
 async def test_get_account_notFound(superuser_token_headers: dict[str, Any]) -> None:
     async with AsyncClient(
         app=app, base_url=f"{str(settings.SERVER_HOST).removesuffix('/')}:{settings.SERVER_PORT}/"
