@@ -57,7 +57,9 @@ async def get_superuser_token_headers() -> Dict[str, str]:
         "username": user_in.email,
         "password": user_in.password,
     }
-    async with AsyncClient(app=app, base_url=f"{str(settings.SERVER_HOST).removesuffix('/')}:{settings.SERVER_PORT}/") as ac:
+    async with AsyncClient(
+        app=app, base_url=f"{str(settings.SERVER_HOST).removesuffix('/')}:{settings.SERVER_PORT}/"
+    ) as ac:
         r = await ac.post(f"{settings.API_V1_STR}/login/access-token", data=login_data)
         return genHeader(r)
 
@@ -70,7 +72,9 @@ async def get_normaluser_token_headers() -> Dict[str, str]:
         "username": user_in.email,
         "password": user_in.password,
     }
-    async with AsyncClient(app=app, base_url=f"{str(settings.SERVER_HOST).removesuffix('/')}:{settings.SERVER_PORT}/") as ac:
+    async with AsyncClient(
+        app=app, base_url=f"{str(settings.SERVER_HOST).removesuffix('/')}:{settings.SERVER_PORT}/"
+    ) as ac:
         r = await ac.post(f"{settings.API_V1_STR}/login/access-token", data=login_data)
         return genHeader(r)
 

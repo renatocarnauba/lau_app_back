@@ -2,7 +2,7 @@ from datetime import datetime
 from enum import Enum
 from typing import Optional
 
-from pydantic import UUID4, BaseModel
+from pydantic import UUID4, BaseModel, ConfigDict
 
 from app.modules.lau_commons.models.baseModel import ModelTemplate
 from app.modules.lau_finance.models.account import CurrencyCode
@@ -24,20 +24,18 @@ class Transaction(ModelTemplate):
 
     is_active: bool = True
     accountId: UUID4
-    installmentNumber: Optional[int]
-    totalInstallments: Optional[int]
+    installmentNumber: Optional[int] = None
+    totalInstallments: Optional[int] = None
     description: str
     conciliationDescription: str
     currencyCode: CurrencyCode
     amount: float
-    category: Optional[str]
+    category: Optional[str] = None
     type: TransactionType
     efetiveDate: datetime
     postingDate: datetime
-    conciliateId: Optional[UUID4]
-
-    class Config:
-        orm_mode = True
+    conciliateId: Optional[UUID4] = None
+    model_config = ConfigDict(from_attributes=True)
 
 
 class TransactionView(Transaction):

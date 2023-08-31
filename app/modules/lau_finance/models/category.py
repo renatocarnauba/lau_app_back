@@ -9,7 +9,7 @@ class Category(ModelTemplate):
     __tablename__ = "fin_category"
     name: str
     owner_id: str
-    parent_id: Optional[UUID4]
+    parent_id: Optional[UUID4] = None
 
 
 # Properties to return to client
@@ -20,7 +20,7 @@ class CategoryView(Category):
 # Properties to receive on item update
 class CategoryUpdate(BaseModel):
     name: Optional[str] = None
-    parent_id: Optional[UUID4]
+    parent_id: Optional[UUID4] = None
 
 
 # Properties to receive on item creation

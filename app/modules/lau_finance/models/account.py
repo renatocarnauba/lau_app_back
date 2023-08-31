@@ -1,7 +1,7 @@
 from enum import Enum
 from typing import Optional
 
-from pydantic import UUID4, BaseModel
+from pydantic import UUID4, BaseModel, ConfigDict
 
 from app.modules.lau_commons.models.baseModel import ModelTemplate
 
@@ -25,23 +25,21 @@ class CurrencyCode(str, Enum):
 class Account(ModelTemplate):
     __tablename__ = "fin_account"
     name: str
-    balance: float
+    balance: float = 0
     owner_id: str
-    conciliateId: Optional[UUID4]
-    currencyCode: CurrencyCode
+    conciliateId: Optional[UUID4] = None
+    currencyCode: CurrencyCode = CurrencyCode.BRL
     is_active: bool = True
-    type: AccountType
-    subtype: AccountSubType
-    number: Optional[str]
-    transferNumber: Optional[str]
-    brand: Optional[str]
-    level: Optional[str]
-    billing_cycle: Optional[int]
-    due_day: Optional[int]
-    institutionId: UUID4
-
-    class Config:
-        orm_mode = True
+    type: AccountType = AccountType.BANK
+    subtype: AccountSubType = AccountSubType.CHECKING_ACCOUNT
+    number: Optional[str] = None
+    transferNumber: Optional[str] = None
+    brand: Optional[str] = None
+    level: Optional[str] = None
+    billing_cycle: Optional[int] = None
+    due_day: Optional[int] = None
+    institutionId: Optional[UUID4] = None
+    model_config = ConfigDict(from_attributes=True)
 
 
 class AccountView(Account):

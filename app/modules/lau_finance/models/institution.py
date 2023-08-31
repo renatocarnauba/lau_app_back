@@ -1,8 +1,8 @@
 from enum import Enum
 from typing import Optional
 
-from pydantic import UUID4, BaseModel, HttpUrl
-from pydantic.color import Color
+from pydantic import UUID4, BaseModel, ConfigDict, HttpUrl
+from pydantic_extra_types.color import Color
 
 from app.modules.lau_commons.models.baseModel import ModelTemplate
 
@@ -21,15 +21,13 @@ class Institution(ModelTemplate):
     __tablename__ = "fin_institution"
     name: str
     owner_id: str
-    conciliateId: Optional[UUID4]
+    conciliateId: Optional[UUID4] = None
     is_active: bool = True
     type: InstitutionType
     primaryColor: Color
     imageUrl: HttpUrl
     country: CountryCode
-
-    class Config:
-        orm_mode = True
+    model_config = ConfigDict(from_attributes=True)
 
 
 class InstitutionView(Institution):

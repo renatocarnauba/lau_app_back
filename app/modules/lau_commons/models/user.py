@@ -1,6 +1,6 @@
 from typing import Optional
 
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel, ConfigDict, EmailStr
 
 from app.modules.lau_commons.models.baseModel import ModelTemplate
 
@@ -34,6 +34,4 @@ class UserView(ModelTemplate, UserBase):
 
 class User(ModelTemplate, UserBase):
     hashed_password: str
-
-    class Config:
-        orm_mode = True
+    model_config = ConfigDict(from_attributes=True)

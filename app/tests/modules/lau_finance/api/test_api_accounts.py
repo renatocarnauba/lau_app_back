@@ -40,7 +40,9 @@ async def test_retrieve_account_mine(normaluser_token_headers: dict[str, Any]) -
         tbAccounts.append(acctDict)
 
     ValueStorage.tbAccounts = tbAccounts
-    async with AsyncClient(app=app, base_url=f"{str(settings.SERVER_HOST).removesuffix('/')}:{settings.SERVER_PORT}/") as ac:
+    async with AsyncClient(
+        app=app, base_url=f"{str(settings.SERVER_HOST).removesuffix('/')}:{settings.SERVER_PORT}/"
+    ) as ac:
         r = await ac.get(
             f"{settings.API_V1_STR}/{lau_finance.__module__}/accounts/mine", headers=normaluser_token_headers
         )
@@ -54,7 +56,9 @@ async def test_retrieve_account_mine(normaluser_token_headers: dict[str, Any]) -
 async def test_retrieve_account_normaluser(normaluser_token_headers: dict[str, Any]) -> None:
     tbAccounts = ValueStorage.tbAccounts
 
-    async with AsyncClient(app=app, base_url=f"{str(settings.SERVER_HOST).removesuffix('/')}:{settings.SERVER_PORT}/") as ac:
+    async with AsyncClient(
+        app=app, base_url=f"{str(settings.SERVER_HOST).removesuffix('/')}:{settings.SERVER_PORT}/"
+    ) as ac:
         r = await ac.get(f"{settings.API_V1_STR}/{lau_finance.__module__}/accounts/", headers=normaluser_token_headers)
         assert r.status_code == 200
         tbAccountsReceived = r.json()
@@ -70,7 +74,9 @@ async def test_retrieve_account_superuser(superuser_token_headers: dict[str, Any
         acctDict = jsonable_encoder(acctDict)
         tbAccounts.append(acctDict)
 
-    async with AsyncClient(app=app, base_url=f"{str(settings.SERVER_HOST).removesuffix('/')}:{settings.SERVER_PORT}/") as ac:
+    async with AsyncClient(
+        app=app, base_url=f"{str(settings.SERVER_HOST).removesuffix('/')}:{settings.SERVER_PORT}/"
+    ) as ac:
         r = await ac.get(f"{settings.API_V1_STR}/{lau_finance.__module__}/accounts/", headers=superuser_token_headers)
         assert r.status_code == 200
         tbAccountsReceived = r.json()
@@ -79,7 +85,9 @@ async def test_retrieve_account_superuser(superuser_token_headers: dict[str, Any
 
 @pytest.mark.anyio
 async def test_create_account(normaluser_token_headers: dict[str, Any]) -> None:
-    async with AsyncClient(app=app, base_url=f"{str(settings.SERVER_HOST).removesuffix('/')}:{settings.SERVER_PORT}/") as ac:
+    async with AsyncClient(
+        app=app, base_url=f"{str(settings.SERVER_HOST).removesuffix('/')}:{settings.SERVER_PORT}/"
+    ) as ac:
         r = await ac.post(
             f"{settings.API_V1_STR}/{lau_finance.__module__}/accounts/",
             headers=normaluser_token_headers,
@@ -99,7 +107,9 @@ async def test_update_account(superuser_token_headers: dict[str, Any]) -> None:
     name = fake_company()
     data["name"] = name
 
-    async with AsyncClient(app=app, base_url=f"{str(settings.SERVER_HOST).removesuffix('/')}:{settings.SERVER_PORT}/") as ac:
+    async with AsyncClient(
+        app=app, base_url=f"{str(settings.SERVER_HOST).removesuffix('/')}:{settings.SERVER_PORT}/"
+    ) as ac:
         r = await ac.put(
             f"{settings.API_V1_STR}/{lau_finance.__module__}/accounts/{account.id}",
             headers=superuser_token_headers,
@@ -118,7 +128,9 @@ async def test_update_account_user_without_privilegies(normaluser_token_headers:
     name = fake_company()
     data["name"] = name
 
-    async with AsyncClient(app=app, base_url=f"{str(settings.SERVER_HOST).removesuffix('/')}:{settings.SERVER_PORT}/") as ac:
+    async with AsyncClient(
+        app=app, base_url=f"{str(settings.SERVER_HOST).removesuffix('/')}:{settings.SERVER_PORT}/"
+    ) as ac:
         r = await ac.put(
             f"{settings.API_V1_STR}/{lau_finance.__module__}/accounts/{account.id}",
             headers=normaluser_token_headers,
@@ -129,7 +141,9 @@ async def test_update_account_user_without_privilegies(normaluser_token_headers:
 
 @pytest.mark.anyio
 async def test_update_account_notFound(superuser_token_headers: dict[str, Any]) -> None:
-    async with AsyncClient(app=app, base_url=f"{str(settings.SERVER_HOST).removesuffix('/')}:{settings.SERVER_PORT}/") as ac:
+    async with AsyncClient(
+        app=app, base_url=f"{str(settings.SERVER_HOST).removesuffix('/')}:{settings.SERVER_PORT}/"
+    ) as ac:
         r = await ac.put(
             f"{settings.API_V1_STR}/{lau_finance.__module__}/accounts/0",
             headers=superuser_token_headers,
@@ -146,7 +160,9 @@ async def test_delete_account(superuser_token_headers: dict[str, Any]) -> None:
     name = fake_company()
     data["name"] = name
 
-    async with AsyncClient(app=app, base_url=f"{str(settings.SERVER_HOST).removesuffix('/')}:{settings.SERVER_PORT}/") as ac:
+    async with AsyncClient(
+        app=app, base_url=f"{str(settings.SERVER_HOST).removesuffix('/')}:{settings.SERVER_PORT}/"
+    ) as ac:
         r = await ac.delete(
             f"{settings.API_V1_STR}/{lau_finance.__module__}/accounts/{account.id}",
             headers=superuser_token_headers,
@@ -163,7 +179,9 @@ async def test_delete_account_user_without_privilegies(normaluser_token_headers:
     name = fake_company()
     data["name"] = name
 
-    async with AsyncClient(app=app, base_url=f"{str(settings.SERVER_HOST).removesuffix('/')}:{settings.SERVER_PORT}/") as ac:
+    async with AsyncClient(
+        app=app, base_url=f"{str(settings.SERVER_HOST).removesuffix('/')}:{settings.SERVER_PORT}/"
+    ) as ac:
         r = await ac.delete(
             f"{settings.API_V1_STR}/{lau_finance.__module__}/accounts/{account.id}",
             headers=normaluser_token_headers,
@@ -173,7 +191,9 @@ async def test_delete_account_user_without_privilegies(normaluser_token_headers:
 
 @pytest.mark.anyio
 async def test_delete_account_notFound(superuser_token_headers: dict[str, Any]) -> None:
-    async with AsyncClient(app=app, base_url=f"{str(settings.SERVER_HOST).removesuffix('/')}:{settings.SERVER_PORT}/") as ac:
+    async with AsyncClient(
+        app=app, base_url=f"{str(settings.SERVER_HOST).removesuffix('/')}:{settings.SERVER_PORT}/"
+    ) as ac:
         r = await ac.delete(
             f"{settings.API_V1_STR}/{lau_finance.__module__}/accounts/0",
             headers=superuser_token_headers,
@@ -186,7 +206,9 @@ async def test_get_account(superuser_token_headers: dict[str, Any]) -> None:
     data = fake_account_data()
     account = await create_fake_account(data=data)
 
-    async with AsyncClient(app=app, base_url=f"{str(settings.SERVER_HOST).removesuffix('/')}:{settings.SERVER_PORT}/") as ac:
+    async with AsyncClient(
+        app=app, base_url=f"{str(settings.SERVER_HOST).removesuffix('/')}:{settings.SERVER_PORT}/"
+    ) as ac:
         r = await ac.get(
             f"{settings.API_V1_STR}/{lau_finance.__module__}/accounts/{account.id}",
             headers=superuser_token_headers,
@@ -205,7 +227,9 @@ async def test_get_account_user_without_privilegies(normaluser_token_headers: di
     name = fake_company()
     data["name"] = name
 
-    async with AsyncClient(app=app, base_url=f"{str(settings.SERVER_HOST).removesuffix('/')}:{settings.SERVER_PORT}/") as ac:
+    async with AsyncClient(
+        app=app, base_url=f"{str(settings.SERVER_HOST).removesuffix('/')}:{settings.SERVER_PORT}/"
+    ) as ac:
         r = await ac.get(
             f"{settings.API_V1_STR}/{lau_finance.__module__}/accounts/{account.id}",
             headers=normaluser_token_headers,
@@ -215,7 +239,9 @@ async def test_get_account_user_without_privilegies(normaluser_token_headers: di
 
 @pytest.mark.anyio
 async def test_get_account_notFound(superuser_token_headers: dict[str, Any]) -> None:
-    async with AsyncClient(app=app, base_url=f"{str(settings.SERVER_HOST).removesuffix('/')}:{settings.SERVER_PORT}/") as ac:
+    async with AsyncClient(
+        app=app, base_url=f"{str(settings.SERVER_HOST).removesuffix('/')}:{settings.SERVER_PORT}/"
+    ) as ac:
         r = await ac.get(
             f"{settings.API_V1_STR}/{lau_finance.__module__}/accounts/0",
             headers=superuser_token_headers,

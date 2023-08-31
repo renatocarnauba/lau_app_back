@@ -32,7 +32,9 @@ async def create_fake_category(data: dict[str, Any] | None = None) -> Category:
 
 async def create_fake_category_mine(token: dict[str, Any]) -> Category:
     category_in = CategoryCreate(**fake_category_data())
-    async with AsyncClient(app=app, base_url=f"{str(settings.SERVER_HOST).removesuffix('/')}:{settings.SERVER_PORT}/") as ac:
+    async with AsyncClient(
+        app=app, base_url=f"{str(settings.SERVER_HOST).removesuffix('/')}:{settings.SERVER_PORT}/"
+    ) as ac:
         r = await ac.get(f"{settings.API_V1_STR}/users/me", headers=token)
         assert r.status_code == 200
         current_user = r.json()
