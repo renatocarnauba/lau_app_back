@@ -17,7 +17,7 @@ async def test_get_access_token() -> None:
         "username": settings.FIRST_SUPERUSER,
         "password": settings.FIRST_SUPERUSER_PASSWORD,
     }
-    async with AsyncClient(app=app, base_url=f"{settings.SERVER_HOST}:{settings.SERVER_PORT}/") as ac:
+    async with AsyncClient(app=app, base_url=f"{str(settings.SERVER_HOST).removesuffix('/')}:{settings.SERVER_PORT}/") as ac:
         r = await ac.post(f"{settings.API_V1_STR}/login/access-token", data=login_data)
         tokens = r.json()
         assert r.status_code == 200
@@ -31,7 +31,7 @@ async def test_get_access_user_invalido() -> None:
         "username": settings.FIRST_SUPERUSER + "x",
         "password": settings.FIRST_SUPERUSER_PASSWORD,
     }
-    async with AsyncClient(app=app, base_url=f"{settings.SERVER_HOST}:{settings.SERVER_PORT}/") as ac:
+    async with AsyncClient(app=app, base_url=f"{str(settings.SERVER_HOST).removesuffix('/')}:{settings.SERVER_PORT}/") as ac:
         r = await ac.post(f"{settings.API_V1_STR}/login/access-token", data=login_data)
         check_error_class(errorClass=LoginFail, response=r)
 
@@ -39,7 +39,7 @@ async def test_get_access_user_invalido() -> None:
 @pytest.mark.anyio
 async def test_get_access_user_inativo(superuser_token_headers: dict[str, Any]) -> None:
     data = fake_user_data()
-    async with AsyncClient(app=app, base_url=f"{settings.SERVER_HOST}:{settings.SERVER_PORT}/") as ac:
+    async with AsyncClient(app=app, base_url=f"{str(settings.SERVER_HOST).removesuffix('/')}:{settings.SERVER_PORT}/") as ac:
         r = await ac.post(
             f"{settings.API_V1_STR}/users/",
             headers=superuser_token_headers,
@@ -62,14 +62,14 @@ async def test_get_access_user_inativo(superuser_token_headers: dict[str, Any]) 
         "username": data["username"],
         "password": data["password"],
     }
-    async with AsyncClient(app=app, base_url=f"{settings.SERVER_HOST}:{settings.SERVER_PORT}/") as ac:
+    async with AsyncClient(app=app, base_url=f"{str(settings.SERVER_HOST).removesuffix('/')}:{settings.SERVER_PORT}/") as ac:
         r = await ac.post(f"{settings.API_V1_STR}/login/access-token", data=login_data)
         check_error_class(errorClass=UserInactive, response=r)
 
 
 @pytest.mark.anyio
 async def test_use_access_token(superuser_token_headers: Dict[str, str]) -> None:
-    async with AsyncClient(app=app, base_url=f"{settings.SERVER_HOST}:{settings.SERVER_PORT}/") as ac:
+    async with AsyncClient(app=app, base_url=f"{str(settings.SERVER_HOST).removesuffix('/')}:{settings.SERVER_PORT}/") as ac:
         r = await ac.post(f"{settings.API_V1_STR}/login/test-token", headers=superuser_token_headers)
         result = r.json()
         assert r.status_code == 200

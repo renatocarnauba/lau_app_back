@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 
-from app.modules.lau_finance.api import accounts, categories
+from app.modules.lau_finance.api import accounts, categories, institutions, transactions
 
 api_router = APIRouter(
     prefix="/finance",
@@ -9,3 +9,5 @@ api_router = APIRouter(
 )
 api_router.include_router(accounts.router, prefix="/accounts", tags=["accounts"])
 api_router.include_router(categories.router, prefix="/categories", tags=["categories"])
+api_router.include_router(institutions.router, prefix="/institutions", tags=["institutions"])
+api_router.include_router(transactions.router, prefix="/transactions", tags=["transactions"])

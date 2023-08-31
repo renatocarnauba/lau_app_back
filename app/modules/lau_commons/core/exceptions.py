@@ -59,6 +59,20 @@ class CategoryNotFound(HTTPException):
         super().__init__(status_code=status_code, detail=detail)
 
 
+class InstitutionNotFound(HTTPException):
+    def __init__(self) -> None:
+        status_code = 404
+        detail = "Institution not found"
+        super().__init__(status_code=status_code, detail=detail)
+
+
+class TransactionNotFound(HTTPException):
+    def __init__(self) -> None:
+        status_code = 404
+        detail = "Transaction not found"
+        super().__init__(status_code=status_code, detail=detail)
+
+
 ErrorBase = (
     Type[UserNotFound]
     | Type[UserWithoutPrivileges]
@@ -68,4 +82,6 @@ ErrorBase = (
     | Type[InvalidCredential]
     | Type[AccountNotFound]
     | Type[CategoryNotFound]
+    | Type[InstitutionNotFound]
+    | Type[TransactionNotFound]
 )

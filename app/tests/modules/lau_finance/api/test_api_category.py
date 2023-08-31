@@ -40,7 +40,7 @@ async def test_retrieve_category_mine(normaluser_token_headers: dict[str, Any]) 
         tbCategories.append(acctDict)
 
     ValueStorage.tbCategories = tbCategories
-    async with AsyncClient(app=app, base_url=f"{settings.SERVER_HOST}:{settings.SERVER_PORT}/") as ac:
+    async with AsyncClient(app=app, base_url=f"{str(settings.SERVER_HOST).removesuffix('/')}:{settings.SERVER_PORT}/") as ac:
         r = await ac.get(
             f"{settings.API_V1_STR}/{lau_finance.__module__}/categories/mine", headers=normaluser_token_headers
         )
@@ -54,7 +54,7 @@ async def test_retrieve_category_mine(normaluser_token_headers: dict[str, Any]) 
 async def test_retrieve_category_normaluser(normaluser_token_headers: dict[str, Any]) -> None:
     tbCategories = ValueStorage.tbCategories
 
-    async with AsyncClient(app=app, base_url=f"{settings.SERVER_HOST}:{settings.SERVER_PORT}/") as ac:
+    async with AsyncClient(app=app, base_url=f"{str(settings.SERVER_HOST).removesuffix('/')}:{settings.SERVER_PORT}/") as ac:
         r = await ac.get(
             f"{settings.API_V1_STR}/{lau_finance.__module__}/categories/", headers=normaluser_token_headers
         )
@@ -72,7 +72,7 @@ async def test_retrieve_category_superuser(superuser_token_headers: dict[str, An
         acctDict = jsonable_encoder(acctDict)
         tbCategories.append(acctDict)
 
-    async with AsyncClient(app=app, base_url=f"{settings.SERVER_HOST}:{settings.SERVER_PORT}/") as ac:
+    async with AsyncClient(app=app, base_url=f"{str(settings.SERVER_HOST).removesuffix('/')}:{settings.SERVER_PORT}/") as ac:
         r = await ac.get(f"{settings.API_V1_STR}/{lau_finance.__module__}/categories/", headers=superuser_token_headers)
         assert r.status_code == 200
         tbCategoriesReceived = r.json()
@@ -81,7 +81,7 @@ async def test_retrieve_category_superuser(superuser_token_headers: dict[str, An
 
 @pytest.mark.anyio
 async def test_create_category(normaluser_token_headers: dict[str, Any]) -> None:
-    async with AsyncClient(app=app, base_url=f"{settings.SERVER_HOST}:{settings.SERVER_PORT}/") as ac:
+    async with AsyncClient(app=app, base_url=f"{str(settings.SERVER_HOST).removesuffix('/')}:{settings.SERVER_PORT}/") as ac:
         r = await ac.post(
             f"{settings.API_V1_STR}/{lau_finance.__module__}/categories/",
             headers=normaluser_token_headers,
@@ -101,7 +101,7 @@ async def test_update_category(superuser_token_headers: dict[str, Any]) -> None:
     name = fake_company()
     data["name"] = name
 
-    async with AsyncClient(app=app, base_url=f"{settings.SERVER_HOST}:{settings.SERVER_PORT}/") as ac:
+    async with AsyncClient(app=app, base_url=f"{str(settings.SERVER_HOST).removesuffix('/')}:{settings.SERVER_PORT}/") as ac:
         r = await ac.put(
             f"{settings.API_V1_STR}/{lau_finance.__module__}/categories/{category.id}",
             headers=superuser_token_headers,
@@ -120,7 +120,7 @@ async def test_update_category_user_without_privilegies(normaluser_token_headers
     name = fake_company()
     data["name"] = name
 
-    async with AsyncClient(app=app, base_url=f"{settings.SERVER_HOST}:{settings.SERVER_PORT}/") as ac:
+    async with AsyncClient(app=app, base_url=f"{str(settings.SERVER_HOST).removesuffix('/')}:{settings.SERVER_PORT}/") as ac:
         r = await ac.put(
             f"{settings.API_V1_STR}/{lau_finance.__module__}/categories/{category.id}",
             headers=normaluser_token_headers,
@@ -131,7 +131,7 @@ async def test_update_category_user_without_privilegies(normaluser_token_headers
 
 @pytest.mark.anyio
 async def test_update_category_notFound(superuser_token_headers: dict[str, Any]) -> None:
-    async with AsyncClient(app=app, base_url=f"{settings.SERVER_HOST}:{settings.SERVER_PORT}/") as ac:
+    async with AsyncClient(app=app, base_url=f"{str(settings.SERVER_HOST).removesuffix('/')}:{settings.SERVER_PORT}/") as ac:
         r = await ac.put(
             f"{settings.API_V1_STR}/{lau_finance.__module__}/categories/0",
             headers=superuser_token_headers,
@@ -148,7 +148,7 @@ async def test_delete_category(superuser_token_headers: dict[str, Any]) -> None:
     name = fake_company()
     data["name"] = name
 
-    async with AsyncClient(app=app, base_url=f"{settings.SERVER_HOST}:{settings.SERVER_PORT}/") as ac:
+    async with AsyncClient(app=app, base_url=f"{str(settings.SERVER_HOST).removesuffix('/')}:{settings.SERVER_PORT}/") as ac:
         r = await ac.delete(
             f"{settings.API_V1_STR}/{lau_finance.__module__}/categories/{category.id}",
             headers=superuser_token_headers,
@@ -165,7 +165,7 @@ async def test_delete_category_user_without_privilegies(normaluser_token_headers
     name = fake_company()
     data["name"] = name
 
-    async with AsyncClient(app=app, base_url=f"{settings.SERVER_HOST}:{settings.SERVER_PORT}/") as ac:
+    async with AsyncClient(app=app, base_url=f"{str(settings.SERVER_HOST).removesuffix('/')}:{settings.SERVER_PORT}/") as ac:
         r = await ac.delete(
             f"{settings.API_V1_STR}/{lau_finance.__module__}/categories/{category.id}",
             headers=normaluser_token_headers,
@@ -175,7 +175,7 @@ async def test_delete_category_user_without_privilegies(normaluser_token_headers
 
 @pytest.mark.anyio
 async def test_delete_category_notFound(superuser_token_headers: dict[str, Any]) -> None:
-    async with AsyncClient(app=app, base_url=f"{settings.SERVER_HOST}:{settings.SERVER_PORT}/") as ac:
+    async with AsyncClient(app=app, base_url=f"{str(settings.SERVER_HOST).removesuffix('/')}:{settings.SERVER_PORT}/") as ac:
         r = await ac.delete(
             f"{settings.API_V1_STR}/{lau_finance.__module__}/categories/0",
             headers=superuser_token_headers,
@@ -188,7 +188,7 @@ async def test_get_category(superuser_token_headers: dict[str, Any]) -> None:
     data = fake_category_data()
     category = await create_fake_category(data=data)
 
-    async with AsyncClient(app=app, base_url=f"{settings.SERVER_HOST}:{settings.SERVER_PORT}/") as ac:
+    async with AsyncClient(app=app, base_url=f"{str(settings.SERVER_HOST).removesuffix('/')}:{settings.SERVER_PORT}/") as ac:
         r = await ac.get(
             f"{settings.API_V1_STR}/{lau_finance.__module__}/categories/{category.id}",
             headers=superuser_token_headers,
@@ -207,7 +207,7 @@ async def test_get_category_user_without_privilegies(normaluser_token_headers: d
     name = fake_company()
     data["name"] = name
 
-    async with AsyncClient(app=app, base_url=f"{settings.SERVER_HOST}:{settings.SERVER_PORT}/") as ac:
+    async with AsyncClient(app=app, base_url=f"{str(settings.SERVER_HOST).removesuffix('/')}:{settings.SERVER_PORT}/") as ac:
         r = await ac.get(
             f"{settings.API_V1_STR}/{lau_finance.__module__}/categories/{category.id}",
             headers=normaluser_token_headers,
@@ -217,7 +217,7 @@ async def test_get_category_user_without_privilegies(normaluser_token_headers: d
 
 @pytest.mark.anyio
 async def test_get_category_notFound(superuser_token_headers: dict[str, Any]) -> None:
-    async with AsyncClient(app=app, base_url=f"{settings.SERVER_HOST}:{settings.SERVER_PORT}/") as ac:
+    async with AsyncClient(app=app, base_url=f"{str(settings.SERVER_HOST).removesuffix('/')}:{settings.SERVER_PORT}/") as ac:
         r = await ac.get(
             f"{settings.API_V1_STR}/{lau_finance.__module__}/categories/0",
             headers=superuser_token_headers,

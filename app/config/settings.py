@@ -2,8 +2,8 @@ import secrets
 from typing import Any, Dict, List, Optional, Union
 
 from dotenv import load_dotenv
-from pydantic import AnyHttpUrl, BaseSettings, EmailStr, HttpUrl, PostgresDsn, validator
-
+from pydantic import AnyHttpUrl, EmailStr, HttpUrl, PostgresDsn, validator
+from pydantic_settings import BaseSettings
 
 class Settings(BaseSettings):
     load_dotenv()
@@ -49,9 +49,10 @@ class Settings(BaseSettings):
             return v  # pragma: no cover
         return PostgresDsn.build(
             scheme="postgresql",
-            user=values.get("POSTGRES_USER"),
+            username=values.get("POSTGRES_USER"),
             password=values.get("POSTGRES_PASSWORD"),
             host=values.get("POSTGRES_SERVER"),
+            port=int(values.get("SERVER_PORT")),
             path=f"/{values.get('POSTGRES_DB') or ''}",
         )
 
@@ -61,9 +62,10 @@ class Settings(BaseSettings):
             return v  # pragma: no cover
         return PostgresDsn.build(
             scheme="postgresql+asyncpg",
-            user=values.get("POSTGRES_USER"),
+            username=values.get("POSTGRES_USER"),
             password=values.get("POSTGRES_PASSWORD"),
             host=values.get("POSTGRES_SERVER"),
+            port=int(values.get("SERVER_PORT")),
             path=f"/{values.get('POSTGRES_DB') or ''}",
         )
 

@@ -9,9 +9,9 @@ packages = [{include = "app"}]
 
 [tool.poetry.dependencies]
 python = "^3.11"
-uvicorn = "^0.21.1"
-fastapi = "^0.95.1"
-asyncpg = "^0.27.0"
+uvicorn = "^0.23.2"
+fastapi = "^0.103.0"
+asyncpg = "^0.28.0"
 # numpy = "^1.24.1"
 # python-dateutil = "^2.8.2"
 # pydantic = {extras = ["email"], version = "^1.10.4"}
@@ -27,9 +27,11 @@ passlib = {extras = ["bcrypt"], version = "^1.7.4"}
 # raven = "^6.10.0"
 # jinja2 = "^3.1.2"
 bson = "^0.5.10"
-pydantic = {extras = ["email"], version = "^1.10.7"}
+pydantic = {extras = ["email"], version = "^2.3.0"}
 lau-utils = {git = "https://github.com/renatocarnauba/lau_utils.git"}
 python-multipart = "^0.0.6"
+pydantic-settings = "^2.0.3"
+bump-pydantic = "^0.6.1"
 
 [tool.poetry.group.dev.dependencies]
 black = "^23.1.0"
@@ -42,7 +44,7 @@ flake8 = "^6.0.0"
 autopep8 = "^2.0.1"
 types-python-jose = "^3.3.4.4"
 types-passlib = "^1.7.7.9"
-faker = "^18.4.0"
+faker = "^19.3.1"
 flake8-pyproject = "^1.2.2"
 httpx = "^0.24.0"
 

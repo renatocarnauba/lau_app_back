@@ -11,7 +11,7 @@
 # async def test_celery_worker_test(superuser_token_headers: Dict[str, str]) -> None:
 #     data = {"msg": "test"}
 #     async with AsyncClient(
-#         app=app, base_url=f"{settings.SERVER_HOST}:{settings.SERVER_PORT}/"
+#         app=app, base_url=f"{str(settings.SERVER_HOST).removesuffix('/')}:{settings.SERVER_PORT}/"
 #     ) as ac:
 #         r = await ac.post(
 #             f"{settings.API_V1_STR}/utils/test-celery/",
