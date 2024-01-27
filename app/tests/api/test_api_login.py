@@ -12,6 +12,7 @@ from app.tests.utils.utils import check_error_class
 
 
 @pytest.mark.anyio
+@pytest.mark.api
 async def test_get_access_token() -> None:
     login_data = {
         "username": settings.FIRST_SUPERUSER,
@@ -28,6 +29,7 @@ async def test_get_access_token() -> None:
 
 
 @pytest.mark.anyio
+@pytest.mark.api
 async def test_get_access_user_invalido() -> None:
     login_data = {
         "username": settings.FIRST_SUPERUSER + "x",
@@ -41,6 +43,7 @@ async def test_get_access_user_invalido() -> None:
 
 
 @pytest.mark.anyio
+@pytest.mark.api
 async def test_get_access_user_inativo(superuser_token_headers: dict[str, Any]) -> None:
     data = fake_user_data()
     async with AsyncClient(
@@ -76,6 +79,7 @@ async def test_get_access_user_inativo(superuser_token_headers: dict[str, Any]) 
 
 
 @pytest.mark.anyio
+@pytest.mark.api
 async def test_use_access_token(superuser_token_headers: Dict[str, str]) -> None:
     async with AsyncClient(
         app=app, base_url=f"{str(settings.SERVER_HOST).removesuffix('/')}:{settings.SERVER_PORT}/"

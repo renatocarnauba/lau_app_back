@@ -1,8 +1,9 @@
 from datetime import datetime
+from decimal import Decimal
 from enum import Enum
 from typing import Optional
 
-from pydantic import UUID4, BaseModel, ConfigDict
+from pydantic import UUID4, BaseModel, ConfigDict, Field
 
 from app.modules.lau_commons.models.baseModel import ModelTemplate
 from app.modules.lau_finance.models.account import CurrencyCode
@@ -26,14 +27,14 @@ class Transaction(ModelTemplate):
     accountId: UUID4
     installmentNumber: Optional[int] = None
     totalInstallments: Optional[int] = None
-    description: str
-    conciliationDescription: str
-    currencyCode: CurrencyCode
-    amount: float
+    description: str | None = None
+    conciliationDescription: str | None = None
+    currencyCode: CurrencyCode = CurrencyCode.BRL
+    amount: Decimal = Field(max_digits=5, decimal_places=2, default=0.01)
     category: Optional[str] = None
-    type: TransactionType
-    efetiveDate: datetime
-    postingDate: datetime
+    type: TransactionType = TransactionType.DEBIT
+    efetiveDate: datetime = datetime.now()
+    postingDate: datetime = datetime.now()
     conciliateId: Optional[UUID4] = None
     model_config = ConfigDict(from_attributes=True)
 
@@ -43,9 +44,31 @@ class TransactionView(Transaction):
 
 
 class TransactionUpdate(BaseModel):
-    name: Optional[str] = None
+    accountId: UUID4
+    installmentNumber: Optional[int] = None
+    totalInstallments: Optional[int] = None
+    description: str | None = None
+    conciliationDescription: str | None = None
+    currencyCode: CurrencyCode = CurrencyCode.BRL
+    amount: Decimal = Field(max_digits=10, decimal_places=2, default=Decimal('0.01'))
+    category: Optional[str] = None
+    type: TransactionType = TransactionType.DEBIT
+    efetiveDate: datetime = datetime.now()
+    postingDate: datetime = datetime.now()
+    conciliateId: Optional[UUID4] = None
 
 
 class TransactionCreate(BaseModel):
-    name: str
     is_test: bool = False
+    accountId: UUID4
+    installmentNumber: Optional[int] = None
+    totalInstallments: Optional[int] = None
+    description: str | None = None
+    conciliationDescription: str | None = None
+    currencyCode: CurrencyCode = CurrencyCode.BRL
+    amount: Decimal = Field(max_digits=10, decimal_places=2, default=Decimal('0.01'))
+    category: Optional[str] = None
+    type: TransactionType = TransactionType.DEBIT
+    efetiveDate: datetime = datetime.now()
+    postingDate: datetime = datetime.now()
+    conciliateId: Optional[UUID4] = None

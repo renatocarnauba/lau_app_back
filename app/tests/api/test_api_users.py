@@ -16,6 +16,7 @@ from app.tests.utils.utils import check_error_class
 
 
 @pytest.mark.anyio
+@pytest.mark.api
 async def test_get_users_me_superuser(superuser_token_headers: Dict[str, str]) -> None:
     async with AsyncClient(
         app=app, base_url=f"{str(settings.SERVER_HOST).removesuffix('/')}:{settings.SERVER_PORT}/"
@@ -28,6 +29,7 @@ async def test_get_users_me_superuser(superuser_token_headers: Dict[str, str]) -
 
 
 @pytest.mark.anyio
+@pytest.mark.api
 async def test_get_existing_user(superuser_token_headers: dict[str, Any]) -> None:
     user = await create_fake_user()
     async with AsyncClient(
@@ -42,6 +44,7 @@ async def test_get_existing_user(superuser_token_headers: dict[str, Any]) -> Non
 
 
 @pytest.mark.anyio
+@pytest.mark.api
 async def test_get_existing_user_me(superuser_token_headers: dict[str, Any]) -> None:
     async with AsyncClient(
         app=app, base_url=f"{str(settings.SERVER_HOST).removesuffix('/')}:{settings.SERVER_PORT}/"
@@ -63,6 +66,7 @@ async def test_get_existing_user_me(superuser_token_headers: dict[str, Any]) -> 
 
 
 @pytest.mark.anyio
+@pytest.mark.api
 async def test_get_existing_user_when_not_superuser(normaluser_token_headers: dict[str, Any]) -> None:
     user = await create_fake_user()
 
@@ -74,6 +78,7 @@ async def test_get_existing_user_when_not_superuser(normaluser_token_headers: di
 
 
 @pytest.mark.anyio
+@pytest.mark.api
 async def test_create_user_existing_username(superuser_token_headers: dict[str, Any]) -> None:
     userData = fake_user_data()
     await create_fake_user(data=userData)
@@ -88,6 +93,7 @@ async def test_create_user_existing_username(superuser_token_headers: dict[str, 
 
 
 @pytest.mark.anyio
+@pytest.mark.api
 async def test_retrieve_users(superuser_token_headers: dict[str, Any]) -> None:
     await create_fake_user()
     await create_fake_user()
@@ -103,6 +109,7 @@ async def test_retrieve_users(superuser_token_headers: dict[str, Any]) -> None:
 
 
 @pytest.mark.anyio
+@pytest.mark.api
 async def test_update_user(superuser_token_headers: dict[str, Any]) -> None:
     data = fake_user_data()
     user = await create_fake_user(data=data)
@@ -124,6 +131,7 @@ async def test_update_user(superuser_token_headers: dict[str, Any]) -> None:
 
 
 @pytest.mark.anyio
+@pytest.mark.api
 async def test_update_user_notFound(superuser_token_headers: dict[str, Any]) -> None:
     async with AsyncClient(
         app=app, base_url=f"{str(settings.SERVER_HOST).removesuffix('/')}:{settings.SERVER_PORT}/"

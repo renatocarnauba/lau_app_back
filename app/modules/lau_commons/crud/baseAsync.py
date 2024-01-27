@@ -2,7 +2,7 @@ from typing import Any, Generic, Optional, Sequence, Type, TypeVar
 from uuid import UUID
 
 from fastapi.encoders import jsonable_encoder
-from lau_utils.mongo import Mongo
+from lau_utils.mongo_handle import MongoHandle
 from pydantic import BaseModel
 
 Base = BaseModel
@@ -21,7 +21,7 @@ class CRUDBaseAsync(Generic[Base, CreateSchemaType, UpdateSchemaType]):
         * `model`: A Pydantic to PyMongo model class
         * `schema`: A Pydantic model (schema) class
         """
-        self.mongo = Mongo(asyncConn=True)
+        self.mongo = MongoHandle()
         self.model = model
 
     @property
@@ -39,7 +39,7 @@ class CRUDBaseAsync(Generic[Base, CreateSchemaType, UpdateSchemaType]):
             return None
 
     async def get_multi(self, *, skip: int = 0, limit: int = 100) -> Sequence[Base]:
-        mongo = Mongo(asyncConn=True)
+        mongo = MongoHandle()
         coll = await mongo.async_get_collection(self.model.__tablename__)
         cursor = coll.find({}, limit=limit, skip=skip)
         listData = await cursor.to_list(length=100)
@@ -100,7 +100,7 @@ class CRUDBaseMultiAsync(CRUDBaseAsync[Base, CreateSchemaType, UpdateSchemaType]
         * `model`: A SQLAlchemy model class
         * `schema`: A Pydantic model (schema) class
         """
-        self.mongo = Mongo(asyncConn=True)
+        self.mongo = MongoHandle()
         self.model = model
 
     @property

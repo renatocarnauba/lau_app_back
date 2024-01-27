@@ -23,10 +23,10 @@ class Institution(ModelTemplate):
     owner_id: str
     conciliateId: Optional[UUID4] = None
     is_active: bool = True
-    type: InstitutionType
-    primaryColor: Color
-    imageUrl: HttpUrl
-    country: CountryCode
+    type: InstitutionType = InstitutionType.PERSONAL_BANK
+    primaryColor: Optional[Color] = None
+    imageUrl: HttpUrl | None = None
+    country: CountryCode = CountryCode.BRAZIL
     model_config = ConfigDict(from_attributes=True)
 
 

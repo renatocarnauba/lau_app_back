@@ -8,6 +8,7 @@ from app.tests.utils.fakeUser import create_fake_user, fake_password, fake_user_
 
 
 @pytest.mark.asyncio
+@pytest.mark.crud
 async def test_create_user() -> None:
     user_in = UserCreate(**fake_user_data())
     user = await crud.user.create(obj_in=user_in)
@@ -16,6 +17,7 @@ async def test_create_user() -> None:
 
 
 @pytest.mark.asyncio
+@pytest.mark.crud
 async def test_authenticate_user() -> None:
     user_in = UserCreate(**fake_user_data())
     user = await crud.user.create(obj_in=user_in)
@@ -25,6 +27,7 @@ async def test_authenticate_user() -> None:
 
 
 @pytest.mark.asyncio
+@pytest.mark.crud
 async def test_not_authenticate_user() -> None:
     user_in = UserCreate(**fake_user_data())
     authenticated_user = await crud.user.authenticate(email=user_in.email, password=user_in.password)
@@ -32,6 +35,16 @@ async def test_not_authenticate_user() -> None:
 
 
 @pytest.mark.asyncio
+@pytest.mark.crud
+async def test_not_authenticate_user_password() -> None:
+    user_in = UserCreate(**fake_user_data())
+    await crud.user.create(obj_in=user_in)
+    authenticated_user = await crud.user.authenticate(email=user_in.email, password="none")
+    assert authenticated_user is None
+
+
+@pytest.mark.asyncio
+@pytest.mark.crud
 async def test_check_if_user_is_active() -> None:
     user_in = UserCreate(**fake_user_data())
     user = await crud.user.create(obj_in=user_in)
@@ -39,6 +52,7 @@ async def test_check_if_user_is_active() -> None:
 
 
 @pytest.mark.asyncio
+@pytest.mark.crud
 async def test_check_if_user_is_active_inactive() -> None:
     user_in = UserCreate(**fake_user_data(active=False))
     user = await crud.user.create(obj_in=user_in)
@@ -46,6 +60,7 @@ async def test_check_if_user_is_active_inactive() -> None:
 
 
 @pytest.mark.asyncio
+@pytest.mark.crud
 async def test_check_if_user_is_superuser() -> None:
     user_in = UserCreate(**fake_user_data(superUser=True))
     user = await crud.user.create(obj_in=user_in)
@@ -53,6 +68,7 @@ async def test_check_if_user_is_superuser() -> None:
 
 
 @pytest.mark.asyncio
+@pytest.mark.crud
 async def test_check_if_user_is_superuser_normal_user() -> None:
     user_in = UserCreate(**fake_user_data(superUser=False))
     user = await crud.user.create(obj_in=user_in)
@@ -60,6 +76,7 @@ async def test_check_if_user_is_superuser_normal_user() -> None:
 
 
 @pytest.mark.asyncio
+@pytest.mark.crud
 async def test_get_user() -> None:
     user = await create_fake_user(superUser=True)
     user_queried = await crud.user.get(id=user.id)
@@ -69,6 +86,7 @@ async def test_get_user() -> None:
 
 
 @pytest.mark.asyncio
+@pytest.mark.crud
 async def test_update_user() -> None:
     user = await create_fake_user(superUser=True)
     new_password = fake_password()

@@ -1,7 +1,7 @@
 from typing import Any, Optional, Type
 
 from fastapi.encoders import jsonable_encoder
-from lau_utils.mongo import Mongo
+from lau_utils.mongo_handle import MongoHandle
 
 from app.modules.lau_commons.core.security import get_password_hash, verify_password
 from app.modules.lau_commons.crud.baseAsync import Base, CRUDBaseAsync
@@ -10,7 +10,7 @@ from app.modules.lau_commons.models.user import User, UserCreate, UserUpdate
 
 class CRUDUser(CRUDBaseAsync[User, UserCreate, UserUpdate]):
     def __init__(self, model: Type[Base], *args, **kwargs):
-        self.mongo = Mongo(asyncConn=True)
+        self.mongo = MongoHandle()
         self.model = model
         super().__init__(model, *args, **kwargs)
 
@@ -37,17 +37,10 @@ class CRUDUser(CRUDBaseAsync[User, UserCreate, UserUpdate]):
         coll = await self.coll
         inserted = await coll.insert_one(jsonable_encoder(db_obj))
         coll = await self.coll
-        dictFounded = await coll.find_one({"_id": inserted.inserted_id})
-        if dictFounded:
-            return self.model(**dictFounded)
-        else:
-            return None
+        return self.model(**await coll.find_one({"_id": inserted.inserted_id}))
 
     async def update(self, *, db_obj: User, obj_in: UserUpdate | dict[str, Any]) -> User:
-        if isinstance(obj_in, dict):
-            update_data = obj_in
-        else:
-            update_data = obj_in.dict(exclude_unset=True)
+        update_data = obj_in.model_dump(exclude_unset=True)
         if update_data["password"]:
             hashed_password = get_password_hash(update_data["password"])
             del update_data["password"]

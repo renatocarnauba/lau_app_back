@@ -8,6 +8,7 @@
 
 
 # @pytest.mark.anyio
+# @pytest.mark.api
 # async def test_celery_worker_test(superuser_token_headers: Dict[str, str]) -> None:
 #     data = {"msg": "test"}
 #     async with AsyncClient(
